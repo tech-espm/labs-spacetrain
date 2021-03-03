@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"module": "system",
+		"target": "ES2017",
+		"lib": [ "ES2017", "DOM" ],
+		"sourceMap": false,
+		"outFile": "assets/js/scripts.js",
+		"emitBOM": true,
+		"strict": true,
+		"removeComments": true
+	},
+	"files": [
+		"scripts/ui/strings.ts",
+		"scripts/constants.ts",
+		"scripts/ui/icon.ts",
+		"scripts/ui/fullscreen.ts",
+		"scripts/ui/pointerHandler.ts",
+		"scripts/ui/modal.ts",
+		"scripts/models/alien.ts",
+		"scripts/view/view.ts",
+		"scripts/view/creditsView.ts",
+		"scripts/view/gameView.ts",
+		"scripts/view/rulesView.ts",
+		"scripts/view/titleView.ts",
+		"scripts/main.ts"
+	]
+}

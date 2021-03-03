@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=no" />
+
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://tech-espm.github.io/labs-spacetrain/" />
+	<meta property="og:title" content="Space Train" />
+	<meta property="og:site_name" content="Space Train" />
+	<meta property="og:description" content="Space Train" />
+	<meta property="og:image" content="https://tech-espm.github.io/labs-spacetrain/screenshot.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1366" />
+	<meta property="og:image:height" content="768" />
+	<meta name="author" content="TECH ESPM" />
+	<meta name="description" content="Space Train" />
+	<meta name="keywords" content="Space Train" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="apple-mobile-web-app-title" content="Space Train" />
+	<link rel="apple-touch-icon" sizes="57x57" href="assets/favicons/apple-icon-57x57.png" />
+	<link rel="apple-touch-icon" sizes="60x60" href="assets/favicons/apple-icon-60x60.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="assets/favicons/apple-icon-72x72.png" />
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/favicons/apple-icon-76x76.png" />
+	<link rel="apple-touch-icon" sizes="114x114" href="assets/favicons/apple-icon-114x114.png" />
+	<link rel="apple-touch-icon" sizes="120x120" href="assets/favicons/apple-icon-120x120.png" />
+	<link rel="apple-touch-icon" sizes="144x144" href="assets/favicons/apple-icon-144x144.png" />
+	<link rel="apple-touch-icon" sizes="152x152" href="assets/favicons/apple-icon-152x152.png" />
+	<link rel="apple-touch-icon" sizes="180x180" href="assets/favicons/apple-icon-180x180.png" />
+	<link rel="icon" type="image/png" sizes="512x512" href="assets/favicons/favicon-512x512.png" />
+	<link rel="icon" type="image/png" sizes="192x192" href="assets/favicons/favicon-192x192.png" />
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/favicons/favicon-96x96.png" />
+	<link rel="icon" type="image/png" sizes="48x48" href="assets/favicons/favicon-48x48.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/favicons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/favicons/favicon-16x16.png" />
+	<link rel="Shortcut Icon" href="assets/favicons/favicon.png" />
+	<link rel="manifest" href="assets/favicons/manifest.json" />
+	<meta name="msapplication-config" content="assets/favicons/browserconfig.xml" />
+	<meta name="theme-color" content="#2f0e52" />
+
+	<title>Space Train</title>
+
+	<style type="text/css">
+		@font-face {
+			font-family: 'Orbitron';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Orbitron Regular'),
+				local('Orbitron-Regular'),
+				url('assets/fonts/Orbitron-Regular.ttf') format('truetype');
+		}
+
+		@font-face {
+			font-family: 'Orbitron';
+			font-style: normal;
+			font-weight: 700;
+			font-display: swap;
+			src: local('Orbitron Bold'),
+				local('Orbitron-Bold'),
+				url('assets/fonts/Orbitron-Bold.ttf') format('truetype');
+		}
+
+		@font-face {
+			font-family: 'SpaceTrain';
+			src: url('assets/fonts/SpaceTrain.ttf?1138mc') format('truetype'),
+				url('assets/fonts/SpaceTrain.woff?1138mc') format('woff'),
+				url('assets/fonts/SpaceTrain.svg?1138mc#SpaceTrain') format('svg');
+			font-style: normal;
+			font-weight: 400;
+			font-display: block;
+		}
+
+		html {
+			height: 100%;
+			min-height: 100%;
+			max-height: 100%;
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+		}
+
+		html, body, .cover {
+			background: #2f0e52; /* Safari for iOS and Opera for Android in fullscreen mode?!?! */
+		}
+
+		html, body, button, input, textarea, select, h1, h2, h3, h4, h5, h6 {
+			font-family: 'Orbitron', sans-serif;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 1;
+		}
+
+		#main, #fadeLeft, #fadeRight, div, .base-element, button {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		#main, div, button, input, .base-element {
+			box-sizing: border-box;
+		}
+
+		table, tr, td {
+			box-sizing: content-box;
+		}
+
+		body {
+			padding: 0;
+			margin: 0;
+			color: #fff;
+			width: 100%;
+			height: 100%;
+			min-height: 100%;
+			max-height: 100%;
+			overflow: hidden;
+		}
+
+		.cover {
+			position: fixed;
+			z-index: 10000;
+			left: 0;
+			top: 0;
+			width: 4px;
+			height: 4px;
+			-webkit-transform-origin: left top;
+			-moz-transform-origin: left top;
+			transform-origin: left top;
+		}
+
+		#main {
+			position: absolute;
+			z-index: 1;
+			overflow: visible;
+			background-image: url(assets/images/background.png);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			/*
+			-moz-backface-visibility: hidden;
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			*/
+		}
+
+		table {
+			border-collapse: collapse;
+			margin: 2rem auto 0;
+		}
+
+		td {
+			vertical-align: middle;
+			text-align: center;
+		}
+
+		tr.target > td.target:hover {
+			background-color: rgba(255,255,255,0.5);
+		}
+
+		td.target {
+			border: 1px solid #fff;
+			-webkit-transition: background-color ease-in-out 0.3s;
+			-o-transition: background-color ease-in-out 0.3s;
+			transition: background-color ease-in-out 0.3s;
+		}
+
+		.alien {
+			transform: scale(0, 0);
+			transform-origin: center;
+			-webkit-transition: transform ease-in-out 0.5s, opacity ease-in-out 0.3s;
+			-o-transition: transform ease-in-out 0.5s, opacity ease-in-out 0.3s;
+			transition: transform ease-in-out 0.5s, opacity ease-in-out 0.3s;
+		}
+
+		.alien.moving {
+			opacity: 0.4;
+			-webkit-transition: opacity ease-in-out 0.3s;
+			-o-transition: opacity ease-in-out 0.3s;
+			transition: opacity ease-in-out 0.3s;
+		}
+
+		.alien.full-size {
+			transform: none;
+		}
+
+		.cover, .modal-container, .fade {
+			opacity: 0;
+			-webkit-transition: opacity ease-in-out 0.5s;
+			-o-transition: opacity ease-in-out 0.5s;
+			transition: opacity ease-in-out 0.5s;
+		}
+
+		.modal {
+			transform: translate(0, -20%);
+			-webkit-transition: transform ease-out 0.5s;
+			-o-transition: transform ease-out 0.5s;
+			transition: transform ease-out 0.5s;
+		}
+
+		.added-points {
+			opacity: 1;
+			transform: translate(0, 0);
+			-webkit-transition: opacity ease-in-out 1.5s, transform ease-out 1.5s;
+			-o-transition: opacity ease-in-out 1.5s, transform ease-out 1.5s;
+			transition: opacity ease-in-out 1.5s, transform ease-out 1.5s;
+		}
+
+		.result-label {
+			opacity: 0;
+			-webkit-transition: opacity ease-out 0.5s;
+			-o-transition: opacity ease-out 0.5s;
+			transition: opacity ease-out 0.5s;
+		}
+
+		button {
+			-webkit-transition: color ease-in-out 0.3s, background-color ease-in-out 0.3s, border-color ease-in-out 0.3s;
+			-o-transition: color ease-in-out 0.3s, background-color ease-in-out 0.3s, border-color ease-in-out 0.3s;
+			transition: color ease-in-out 0.3s, background-color ease-in-out 0.3s, border-color ease-in-out 0.3s;
+		}
+
+		button.fade {
+			-webkit-transition: opacity ease-in-out 0.5s, color ease-in-out 0.3s, background-color ease-in-out 0.3s, border-color ease-in-out 0.3s;
+			-o-transition: opacity ease-in-out 0.5s, color ease-in-out 0.3s, background-color ease-in-out 0.3s, border-color ease-in-out 0.3s;
+			transition: opacity ease-in-out 0.5s, color ease-in-out 0.3s, background-color ease-in-out 0.3s, border-color ease-in-out 0.3s;
+		}
+
+		button.block {
+			display: block;
+			width: 100%;
+		}
+
+		button.block + button.block {
+			margin-top: 0.5rem;
+		}
+
+		#main, button, img, span, .toolbar, .loading, .alien {
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		p {
+			margin: 0;
+			line-height: 1.5;
+		}
+
+		p + p {
+			margin-top: 1rem;
+		}
+
+		small, .small, .fullscreen-button {
+			font-size: 0.75rem;
+		}
+
+		hr {
+			border-style: solid none none;
+			border-color: #fff;
+			border-width: 1px 0 0;
+			margin: 1rem 0;
+		}
+
+		.modal-container {
+			z-index: 1000;
+			background: rgba(47,14,82,0.75);
+			overflow: auto;
+			padding: 1rem;
+		}
+
+		@media (max-width: 350px) {
+			.modal-container {
+				padding: 0.5rem 0;
+			}
+		}
+
+		.modal {
+			background: rgba(255,255,255,0.75);
+			width: 20rem;
+			margin: 0 auto;
+			max-width: 100%;
+		}
+
+		.modal.large {
+			width: 100%;
+			margin: 0;
+		}
+
+		.modal-decoration {
+			background: rgba(255,255,255,0.5);
+			padding: 0.5rem;
+		}
+
+		.modal-body {
+			padding: 1rem 0.5rem;
+		}
+
+		.modal-body, .text-center {
+			text-align: center;
+		}
+
+		.ui-icon {
+			font-family: 'SpaceTrain' !important;
+			line-height: 1;
+			font-weight: 400;
+			font-style: normal;
+			font-variant: normal;
+			text-transform: none;
+			height: 1em;
+			width: 1em;
+			margin-right: 0.25em;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		.ui-icon.no-margin {
+			margin-right: 0;
+		}
+
+		button, input, textarea, select {
+			font-size: inherit;
+		}
+
+		button {
+			display: inline-block;
+			cursor: pointer;
+			-ms-touch-action: manipulation;
+			touch-action: manipulation;
+			text-align: center;
+			vertical-align: top;
+			box-shadow: none;
+			border-radius: 0.75em;
+			padding: 0 1em;
+			height: 2em;
+			background-color: transparent;
+			border: 1px solid #fff;
+		}
+
+		button, button:focus, button:hover, button:active {
+			outline: 0 none transparent;
+			background-image: none;
+		}
+
+		button:disabled {
+			opacity: 0.5;
+			cursor: default;
+		}
+
+		.fullscreen-button {
+			position: absolute;
+			left: 0.5rem;
+			bottom: 0.5rem;
+		}
+
+		.black {
+			color: #000;
+		}
+
+		button.black:not(:disabled):hover {
+			color: #fff;
+			border-color: #000;
+			background-color: #000;
+		}
+
+		.white {
+			color: #fff;
+		}
+
+		button.white:not(:disabled):hover {
+			color: #000;
+			border-color: #fff;
+			background-color: #fff;
+		}
+
+		.blue {
+			color: #00abf8;
+		}
+
+		button.blue:not(:disabled):hover {
+			color: #000;
+			border-color: #00abf8;
+			background-color: #00abf8;
+		}
+
+		.green {
+			color: #39ca30;
+		}
+
+		button.green:not(:disabled):hover {
+			color: #000;
+			border-color: #39ca30;
+			background-color: #39ca30;
+		}
+
+		.orange {
+			color: #ff9400;
+		}
+
+		button.orange:not(:disabled):hover {
+			color: #000;
+			border-color: #ff9400;
+			background-color: #ff9400;
+		}
+
+		.red {
+			color: #ff1d25;
+		}
+
+		button.red:not(:disabled):hover {
+			color: #000;
+			border-color: #ff1d25;
+			background-color: #ff1d25;
+		}
+
+		.pink {
+			color: #ff7caf;
+		}
+
+		button.pink:not(:disabled):hover {
+			color: #000;
+			border-color: #ff7caf;
+			background-color: #ff7caf;
+		}
+
+		.modal a {
+			color: #04f;
+			text-decoration: none;
+		}
+
+		.modal a, .modal a:focus, .modal a:hover, .modal a:active {
+			outline: 0 none transparent;
+			background: none;
+		}
+
+		.modal a:focus, .modal a:active {
+			color: #008;
+		}
+
+		img, span, .no-pointer, .horizontal-spacer, .vertical-spacer {
+			pointer-events: none;
+		}
+
+		img, span, .horizontal-spacer {
+			display: inline-block;
+			vertical-align: top;
+		}
+
+		img {
+			max-width: 100%;
+		}
+
+		.horizontal-spacer {
+			height: 0;
+		}
+
+		.vertical-spacer {
+			width: 0;
+		}
+
+		.small-vertical-margin {
+			margin-top: 0.5rem;
+			margin-bottom: 0.5rem;
+		}
+
+		.small-horizontal-margin {
+			margin-left: 0.5rem;
+			margin-right: 0.5rem;
+		}
+
+		.small-left-margin {
+			margin-left: 0.5rem;
+		}
+
+		.small-top-margin {
+			margin-top: 0.5rem;
+		}
+
+		.small-right-margin {
+			margin-right: 0.5rem;
+		}
+
+		.small-bottom-margin {
+			margin-bottom: 0.5rem;
+		}
+
+		label, input {
+			display: block;
+			text-align: left;
+			width: 100%;
+		}
+
+		input {
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			border-style: solid;
+			border-color: #000;
+			border-radius: 0;
+		}
+
+			input, input:focus, input:hover, input:active {
+				outline: 0 none transparent;
+				background-color: #fff;
+				background-image: none;
+				box-shadow: none;
+			}
+
+		#fadeLeft, #fadeRight, .base-element {
+			position: absolute;
+			top: 0;
+		}
+
+		#fadeLeft, #fadeRight {
+			bottom: 0;
+			width: 24px;
+			background-size: 48px 100%;
+			background-repeat: no-repeat;
+			pointer-events: none;
+			background-image: url(assets/images/fade.png);
+		}
+
+		#fadeLeft {
+			left: -24px;
+		}
+
+		#fadeRight {
+			right: -24px;
+			background-position: -24px 0;
+		}
+
+		.base-element {
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+
+		.loading {
+			position: absolute;
+			z-index: 10001;
+			margin: 0;
+			padding: 0;
+			left: 0;
+			bottom: 0;
+			width: 4.3rem;
+			height: 1.5rem;
+			opacity: 0.75;
+			background: no-repeat center url('assets/images/loading.gif') #fff;
+			background-size: 80% 60%;
+			pointer-events: none;
+		}
+
+		.hidden-container {
+			z-index: 0;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 0;
+			overflow: hidden;
+		}
+
+		.right {
+			text-align: right;
+		}
+
+		.alien {
+			display: inline-block;
+			margin: 0;
+			padding: 0;
+			background-repeat: no-repeat;
+			pointer-events: none;
+		}
+
+		.result-label {
+			font-size: 2rem;
+			line-height: 2.5rem;
+			margin-top: 1rem;
+			pointer-events: none;
+		}
+
+		.added-points {
+			position: absolute;
+			z-index: 2;
+			font-size: 3rem;
+			text-align: center;
+			left: 0;
+			top: 0;
+			width: 100%;
+		}
+
+		.added-points.fading {
+			opacity: 0;
+			transform: translate(0, 5rem);
+		}
+
+		.visible {
+			opacity: 1;
+		}
+
+		button:disabled.visible {
+			opacity: 0.5;
+		}
+
+		.fade:not(.visible) {
+			pointer-events: none;
+		}
+
+		.modal-container.visible > .modal {
+			transform: translate(0, 0);
+		}
+	</style>
+</head>
+<body>
+	<noscript>Sorry! You need to enable JavaScript in order to run the game :(</noscript>
+	<div id="main"><div id="fadeLeft"></div><div id="fadeRight"></div></div>
+	<div id="cover" class="cover visible" style="transform: scale(999,999);"></div>
+
+	<script type="text/javascript">
+		//<![CDATA[
+		"use strict";
+
+		window["spacetrainCheckSetup"] = function () {
+			if (window["spacetrainStepMAIN"]) {
+				delete window["spacetrainStepMAIN"];
+				delete window["spacetrainCheckSetup"];
+				var promise = setup();
+				if (promise && promise["catch"])
+					promise["catch"](function (e) {
+						alert("Error during setup " + ((e && (e.message || e.toString())) || "") + " :(");
+					});
+			}
+		};
+
+		(function () {
+			function loadScript(src, successCallback, errorCallback) {
+				window.onerror = errorCallback;
+				var s = document.createElement("script");
+				s.setAttribute("type", "text/javascript");
+				s.setAttribute("charset", "utf-8");
+				document.body.appendChild(s);
+				s.onload = successCallback;
+				s.onerror = errorCallback;
+				s.setAttribute("src", src);
+				return s;
+			}
+
+			function finalCallback() {
+				var errorAlerted = false;
+				window.onerror = function (msg, url, line, col, error) {
+					// Firefox for iOS, user agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15,
+					// reports a script error when loading the scripts but nothing is wrong! Everything works fine!
+					// Not even this prevented the script error from being generated: https://stackoverflow.com/a/7778424/3569421
+					if (msg && (msg == "Script error" || msg == "Script error."))
+						return;
+					debugger;
+					if (errorAlerted)
+						return;
+					errorAlerted = true;
+					alert("Error: " + msg + " @ " + line + ":" + col + " " + url);
+				};
+
+				if (window["spacetrainCheckSetup"])
+					window["spacetrainCheckSetup"]();
+			}
+
+			// Modified version of https://stackoverflow.com/a/29046739/3569421
+			function checkES6() {
+				try {
+					if ((typeof Symbol) == "undefined")
+						return false;
+					var a;
+					eval("a = `1`");
+				} catch (ex) {
+					return false;
+				}
+				return true;
+			}
+
+			function showError(msg, a) {
+				var i;
+				if (a && a.length) {
+					// Firefox for iOS, user agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15,
+					// reports a script error when loading the scripts but nothing is wrong! Everything works fine!
+					// Not even this prevented the script error from being generated: https://stackoverflow.com/a/7778424/3569421
+					if (a[0] && (a[0] == "Script error" || a[0] == "Script error."))
+						return;
+					msg += "\n\nError: " + a[0];
+					for (i = 1; i < a.length; i++)
+						msg += ", " + a[i];
+				}
+				alert(msg);
+			}
+
+			function loadMainScript() {
+				var version = (("WebAssembly" in window) ? "" : (checkES6() ? "es6" : "es5"));
+
+				// Trying to add a script to the body element, then removing it and adding
+				// another version leads to duplicate variable declaration (using let/const),
+				// because all globals remain declared, even if the script tag is removed.
+				// Therefore, we need to know the exact version that must be loaded.
+				// According to Can I Use:
+				// https://caniuse.com/wasm / https://caniuse.com/mdn-javascript_operators_await
+				// if a browser has support for WebAssembly it also has support for async/await
+				// (but not the opposite).
+
+				window["spacetrainESVersion"] = version;
+
+				// All TS files are being concatenated into a single file according to the
+				// order specified in the files array, inside tsconfig.json
+				loadScript("assets/js/scripts." + (version ? (version + ".") : version) + "min.js", finalCallback, function (msg, url, line, col, error) {
+					showError("Impossible to load the main script :(", arguments);
+				});
+			}
+
+			function checkPromise() {
+				try {
+					if (("Promise" in window)) {
+						loadMainScript();
+						return;
+					}
+				} catch (ex) {
+				}
+
+				loadScript("assets/js/es6-promise.auto.min.js", loadMainScript, function (msg, url, line, col, error) {
+					showError("Impossible to load the promise script :(", arguments);
+				});
+			}
+
+			function fixRequestAnimationFrame() {
+				// Modified version of https://gist.github.com/desandro/1866474
+				var lastTime = 0, prefixes = "webkit moz ms o".split(" "),
+					requestAnimationFrame = window.requestAnimationFrame,
+					cancelAnimationFrame = window.cancelAnimationFrame,
+					prefix, i;
+
+				for (i = 0; i < prefixes.length; i++) {
+					if (requestAnimationFrame && cancelAnimationFrame)
+						break;
+					prefix = prefixes[i];
+					if (!requestAnimationFrame)
+						requestAnimationFrame = window[prefix + "RequestAnimationFrame"];
+					if (!cancelAnimationFrame)
+						cancelAnimationFrame = window[prefix + "CancelAnimationFrame"] || window[prefix + "CancelRequestAnimationFrame"];
+				}
+
+				if (!requestAnimationFrame || !cancelAnimationFrame) {
+					requestAnimationFrame = function (callback) {
+						return window.setTimeout(function() {
+							lastTime = performance.now();
+							callback(lastTime);
+						}, Math.max(0, 16 - (performance.now() - lastTime)));
+					};
+
+					cancelAnimationFrame = window.clearTimeout;
+				}
+
+				window.requestAnimationFrame = requestAnimationFrame;
+				window.cancelAnimationFrame = cancelAnimationFrame;
+			}
+
+			function checkPolyfills() {
+				if (!Function.prototype.bind) {
+					Function.prototype.bind = function (_this) {
+						// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+						// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply#Description
+						// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
+						var originalFunction = this, slice, originalExtraArguments;
+						if (arguments.length <= 1)
+							return function () {
+								return originalFunction.apply(_this, arguments);
+							};
+						slice = Array.prototype.slice;
+						originalExtraArguments = slice.call(arguments, 1);
+						return function () {
+							return originalFunction.apply(_this, originalExtraArguments.concat(slice.call(arguments)));
+						};
+					};
+				}
+
+				if (!Array.prototype.fill) {
+					// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
+					Array.prototype.fill = function (value, start, end) {
+						var i, length = this.length | 0;
+						start |= 0;
+						end = ((end === undefined) ? length : (end | 0));
+						end = ((end < 0) ? Math.max(length + end, 0) : Math.min(end, length));
+						i = ((start < 0) ? Math.max(length + start, 0) : Math.min(start, length));
+						while (i < end)
+							this[i++] = value;
+						return this;
+					};
+				}
+
+				if (!String.prototype.trim) {
+					String.prototype.trim = (function () {
+						var expr = /^\s+|\s+$/g;
+						return function () { return this.replace(expr, ""); };
+					})();
+				}
+
+				if (!String.prototype.startsWith) {
+					String.prototype.startsWith = function (start, position) {
+						// Try to simulate the actual behavior of startsWith()
+						if (this === "")
+							return (start === "");
+						if (!this)
+							return false;
+						if (start === "")
+							return true;
+						if (position === undefined || position < 0)
+							position = 0;
+						if (!start || (start.length + position) > this.length)
+							return false;
+						var i = this.indexOf(start, position);
+						return (i);
+					};
+				}
+
+				if (!String.prototype.endsWith) {
+					String.prototype.endsWith = function (end, desiredLength) {
+						// Try to simulate the actual behavior of endsWith()
+						if (this === "")
+							return (end === "");
+						if (!this)
+							return false;
+						if (end === "")
+							return true;
+						if (desiredLength === undefined || desiredLength > this.length)
+							desiredLength = this.length;
+						if (!end || end.length > desiredLength)
+							return false;
+						var i = this.lastIndexOf(end, desiredLength);
+						return (i >= 0 && i === (desiredLength - end.length));
+					};
+				}
+
+				if (!Date.now) {
+					Date.now = function () {
+						return (new Date()).getTime();
+					};
+				}
+
+				if (!window.performance || !window.performance.now) {
+					(function () {
+						var initialNow = Date.now();
+						if (!window.performance)
+							window.performance = {};
+						window.performance.now = function () {
+							return Date.now() - initialNow;
+						};
+					});
+				}
+
+				if (!window.requestAnimationFrame || !window.cancelAnimationFrame)
+					fixRequestAnimationFrame();
+
+				checkPromise();
+			}
+
+			checkPolyfills();
+		})();
+
+		//]]>
+	</script>
+</body>
+</html>

@@ -1,9 +1,9 @@
-# labs-spacetrain
+# Space Train
 
-Space Train
+You can play the game online [here](https://tech-espm.github.io/labs-spacetrain/ "Space Train").
 
----
+This project is licensed under the [MIT License](https://github.com/tech-espm/labs-spacetrain/blob/main/LICENSE).
 
-O jogo Space Train é licenciado sob a [MIT License](https://github.com/tech-espm/labs-spacetrain/blob/master/LICENSE).
+The game uses the font [Orbitron](https://github.com/google/fonts/tree/master/ofl/orbitron), licensed under the [SIL Open Font License](https://github.com/google/fonts/blob/master/ofl/orbitron/OFL.txt).
 
-Toda a infraestrutura básica (eventos, janelas, toque e transições) foi tirada do jogo [Pixel](https://github.com/carlosrafaelgn/pixel), licenciada sob a [MIT License](https://github.com/carlosrafaelgn/pixel/blob/master/LICENSE).
+The basic infrastructure (events, modals, touch, pointer and transitions) was taken from the game [Pixel](https://github.com/carlosrafaelgn/pixel), licensed under the [MIT License](https://github.com/carlosrafaelgn/pixel/blob/master/LICENSE).
