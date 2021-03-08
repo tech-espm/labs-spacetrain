@@ -48,6 +48,10 @@ class GameView extends View {
 	private lastPlacedAlien: number;
 	private originalAlienPlacement: number;
 
+	private readonly boundMouseDown: any;
+	private readonly boundMouseMove: any;
+	private readonly boundMouseUp: any;
+	private readonly boundOutsidePointerHandler: any;
 	private readonly boundRender: any;
 
 	public constructor() {
@@ -108,6 +112,10 @@ class GameView extends View {
 		this.lastPlacedAlien = 0;
 		this.originalAlienPlacement = -1;
 
+		this.boundMouseDown = this.mouseDown.bind(this);
+		this.boundMouseMove = this.mouseMove.bind(this);
+		this.boundMouseUp = this.mouseUp.bind(this);
+		this.boundOutsidePointerHandler = this.outsidePointerHandler.bind(this);
 		this.boundRender = this.render.bind(this);
 	}
 
@@ -116,11 +124,7 @@ class GameView extends View {
 
 		this.alive = true;
 
-		this.pointerHandler = new PointerHandler(this.baseElement, this.mouseDown.bind(this), this.mouseMove.bind(this), this.mouseUp.bind(this));
-
-		this.pointerHandler.outsidePointerHandler = (e) => {
-			return ((e.target && (e.target as HTMLElement).tagName === "TD" && (e.target as HTMLElement).childNodes.length) ? true : false);
-		};
+		this.pointerHandler = new PointerHandler(this.baseElement, this.boundMouseDown, this.boundMouseMove, this.boundMouseUp, false, this.boundOutsidePointerHandler);
 	}
 
 	protected async detach(): Promise<void> {
@@ -504,6 +508,10 @@ class GameView extends View {
 					this.nextRoundButton.replaceChild(document.createTextNode(Strings.Finish), this.nextRoundButton.childNodes[1]);
 			}
 		}
+	}
+
+	private outsidePointerHandler(e: Event): boolean {
+		return ((e.target && (e.target as HTMLElement).tagName === "TD" && (e.target as HTMLElement).childNodes.length) ? true : false);
 	}
 
 	private render(time: number): void {
