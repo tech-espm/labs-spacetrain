@@ -98,7 +98,7 @@ abstract class View {
 	public static windowResized(elementSizeChanged: boolean): void {
 		if (baseLeftCss < 8) {
 			if (!View.fadeLeft.style.backgroundColor) {
-				const color = (isPWA ? "#2f0e52" : "#000");
+				const color = "#2f0e52";
 				View.fadeLeft.style.backgroundColor = color;
 				View.fadeRight.style.backgroundColor = color;
 				View.fadeLeft.style.backgroundImage = "none";

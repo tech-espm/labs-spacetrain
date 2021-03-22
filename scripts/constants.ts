@@ -24,8 +24,7 @@
 // https://github.com/tech-espm/labs-spacetrain
 //
 
-const isPWA = (window.location.href.indexOf("pwa") >= 0),
-	isIOSOrSafari = (function () {
+const isIOSOrSafari = (function () {
 		// https://stackoverflow.com/q/9038625/3569421
 		if ((navigator.userAgent.indexOf("Chrome") <= 0 && navigator.userAgent.indexOf("Safari") >= 0) ||
 			(navigator.userAgent.indexOf("Mac") >= 0 && ("ontouchend" in document)))
@@ -57,8 +56,8 @@ const isPWA = (window.location.href.indexOf("pwa") >= 0),
 	blinkTotalDurationMS = (blinkLastCounter + 1) * blinkSingleDurationMS,
 	baseWidth = 1280,
 	baseHeight = 720,
-	alienWidthRem = 4,
-	alienHeightRem = 4,
+	alienWidthRem = 3.361930295,
+	alienHeightRem = 3.361930295,
 	alienWidthCss = alienWidthRem + "rem",
 	alienHeightCss = alienHeightRem + "rem",
 	baseFontSize = 32,

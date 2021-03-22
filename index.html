@@ -144,25 +144,37 @@
 			*/
 		}
 
-		table {
-			border-collapse: collapse;
-			margin: 2rem auto 0;
+		.train {
+			background-image: url(assets/images/train.png);
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-position: left top;
+			text-align: left;
+			padding-top: 0.264879357rem;
+			padding-left: 0.101876676rem;
+			margin: 3rem auto 0;
+			width: 38rem;
+			height: 4.5rem;
 		}
 
-		td {
-			vertical-align: middle;
-			text-align: center;
-		}
-
-		tr.target > td.target:hover {
+		.train.dragging > .target:hover {
 			background-color: rgba(255,255,255,0.5);
 		}
 
-		td.target {
-			border: 1px solid #fff;
+		.target {
+			display: inline-block;
+			vertical-align: top;
+			text-align: center;
+			border-radius: 0.489008043rem;
+			width: 3.463806971rem;
+			height: 3.361930295rem;
 			-webkit-transition: background-color ease-in-out 0.3s;
 			-o-transition: background-color ease-in-out 0.3s;
 			transition: background-color ease-in-out 0.3s;
+		}
+
+		.target + .target {
+			margin-left: 0.489008043rem;
 		}
 
 		.alien {
@@ -208,9 +220,9 @@
 
 		.result-label {
 			opacity: 0;
-			-webkit-transition: opacity ease-out 0.5s;
-			-o-transition: opacity ease-out 0.5s;
-			transition: opacity ease-out 0.5s;
+			-webkit-transition: opacity ease-in-out 0.5s;
+			-o-transition: opacity ease-in-out 0.5s;
+			transition: opacity ease-in-out 0.5s;
 		}
 
 		button {
@@ -571,10 +583,57 @@
 		}
 
 		.result-label {
-			font-size: 2rem;
+			position: absolute;
+			left: 0;
+			bottom: 1rem;
+			width: 100%;
 			line-height: 2.5rem;
-			margin-top: 1rem;
 			pointer-events: none;
+		}
+
+		.result-label > .round {
+			margin-right: 1rem;
+			width: 10rem;
+			text-align: right;
+		}
+
+		.result-label > .marker {
+			position: relative;
+			display: inline-block;
+			margin: 0.75rem 0.25rem;
+			width: 1rem;
+			height: 1rem;
+			border: 0.1rem solid #fff;
+			border-radius: 2rem;
+			box-sizing: border-box;
+		}
+
+		.result-label > .marker > .points {
+			position: absolute;
+			left: -0.35rem;
+			top: -2rem;
+			width: 1.5rem;
+			font-size: 0.75rem;
+		}
+
+		.result-label > .marker.done {
+			background-color: #fff;
+		}
+
+		.result-label > .total {
+			margin-left: 1rem;
+			width: 10rem;
+			text-align: left;
+		}
+
+		.result-label > .row2 {
+			margin-top: 0.5rem;
+		}
+
+		.result-label > .row2 > img {
+			vertical-align: middle;
+    		margin: 0 1rem;
+			height: 2rem;
 		}
 
 		.added-points {
@@ -585,6 +644,7 @@
 			left: 0;
 			top: 0;
 			width: 100%;
+			pointer-events: none;
 		}
 
 		.added-points.fading {
@@ -613,6 +673,7 @@
 	<noscript>Sorry! You need to enable JavaScript in order to run the game :(</noscript>
 	<div id="main"><div id="fadeLeft"></div><div id="fadeRight"></div></div>
 	<div id="cover" class="cover visible" style="transform: scale(999,999);"></div>
+	<audio id="bg-music" src="assets/sounds/bg.mp3" autoplay loop />
 
 	<script type="text/javascript">
 		//<![CDATA[

@@ -37,8 +37,12 @@ class GameView extends View {
 
 	private nextRoundButton: HTMLButtonElement;
 	private shelf: HTMLDivElement;
-	private alienRow: HTMLTableRowElement;
+	private alienRow: HTMLDivElement;
 	private resultLabel: HTMLDivElement;
+	private resultLabelRound: HTMLSpanElement;
+	private resultLabelMarker: HTMLSpanElement[];
+	private resultLabelTotal: HTMLSpanElement;
+	private readonly musicButton: HTMLButtonElement;
 
 	private movingAlien: Alien | null;
 	private movingInitialX: number;
@@ -59,12 +63,12 @@ class GameView extends View {
 
 		this.baseElement.classList.add("text-center");
 
-		const backButton = View.createWhiteButton(this.baseElement, { imageId: Icon.Clear, text: Strings.Close }, this.back.bind(this));
+		const backButton = View.createWhiteButton(this.baseElement, { imageId: Icon.Clear, text: Strings.Close }, this.back.bind(this), "small");
 		backButton.style.position = "absolute";
 		backButton.style.left = smallMarginCss;
 		backButton.style.top = smallMarginCss;
 
-		const nextRoundButton = View.createBlueButton(this.baseElement, { imageId: Icon.Accept, text: Strings.NextRound }, this.nextRound.bind(this), "fade visible");
+		const nextRoundButton = View.createBlueButton(this.baseElement, { imageId: Icon.Accept, text: Strings.NextRound }, this.nextRound.bind(this), "small fade visible");
 		nextRoundButton.setAttribute("disabled", "disabled");
 		nextRoundButton.style.position = "absolute";
 		nextRoundButton.style.right = smallMarginCss;
@@ -78,26 +82,58 @@ class GameView extends View {
 		this.shelf = shelf;
 		this.baseElement.appendChild(shelf);
 
-		const table = document.createElement("table"),
-			tbody = document.createElement("tbody"),
-			tr = document.createElement("tr");
+		const alienRow = document.createElement("div");
+		alienRow.className = "train";
+		this.alienRow = alienRow;
 
 		for (let i = GameView.MaximumAlienCount - 1; i >= 0; i--) {
-			const td = document.createElement("td");
-			td.style.width = (alienWidthRem + smallMarginRem) + "rem";
-			td.style.height = (alienHeightRem + smallMarginRem) + "rem";
-			td.className = "target";
-			tr.appendChild(td);
+			const target = document.createElement("div");
+			target.className = "target";
+			alienRow.appendChild(target);
 		}
-		tbody.appendChild(tr);
-		table.appendChild(tbody);
-		this.baseElement.appendChild(table);
-		this.alienRow = tr;
+
+		this.baseElement.appendChild(alienRow);
 
 		const resultLabel = document.createElement("div");
 		resultLabel.className = "result-label";
 		this.resultLabel = resultLabel;
+
+		const resultLabelRound = document.createElement("span");
+		resultLabelRound.className = "round";
+		resultLabel.appendChild(resultLabelRound);
+		this.resultLabelRound = resultLabelRound;
+
+		const resultLabelMarker: HTMLSpanElement[] = new Array(GameView.TotalRoundCount);
+		for (let i = 0; i < GameView.TotalRoundCount; i++) {
+			const marker = document.createElement("span");
+			marker.className = "marker";
+			resultLabel.appendChild(marker);
+			resultLabelMarker[i] = marker;
+			const points = document.createElement("span");
+			points.className = "points";
+			marker.appendChild(points);
+		}
+		this.resultLabelMarker = resultLabelMarker;
+
+		const resultLabelTotal = document.createElement("span");
+		resultLabelTotal.className = "total";
+		resultLabel.appendChild(resultLabelTotal);
+		this.resultLabelTotal = resultLabelTotal;
+
+		const resultLabelRow2 = document.createElement("div");
+		resultLabelRow2.className = "row2";
+		resultLabelRow2.innerHTML = `<s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</s><img src="assets/images/logo-small.png" /><s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</s>`;
+		resultLabel.appendChild(resultLabelRow2);
+
 		this.baseElement.appendChild(resultLabel);
+
+		this.musicButton = View.createWhiteButton(this.baseElement, musicPlaying ? Strings.StopMusic : Strings.PlayMusic, toggleMusic, "fade small visible");
+		this.musicButton.style.position = "absolute";
+		this.musicButton.style.fontSize = "0.5rem";
+		this.musicButton.style.left = "1.5rem";
+		this.musicButton.style.bottom = "1.5rem";
+
+		this.baseElement.appendChild(this.musicButton);
 
 		this.alive = true;
 		this.animating = false;
@@ -120,6 +156,9 @@ class GameView extends View {
 	}
 
 	protected async attach(): Promise<void> {
+		musicButton = this.musicButton;
+		updateMusicButton();
+
 		this.lastTime = performance.now();
 
 		this.alive = true;
@@ -128,6 +167,8 @@ class GameView extends View {
 	}
 
 	protected async detach(): Promise<void> {
+		musicButton = null;
+
 		this.alive = false;
 
 		if (this.pointerHandler) {
@@ -163,6 +204,9 @@ class GameView extends View {
 	}
 
 	private async displayAddedPoints(addedPoints: number): Promise<void> {
+		if (this.round > 1 && this.round <= (GameView.TotalRoundCount + 1))
+			(this.resultLabelMarker[this.round - 2].firstChild as HTMLSpanElement).textContent = addedPoints.toString();
+
 		if (!addedPoints)
 			return;
 
@@ -241,11 +285,17 @@ class GameView extends View {
 			newPromises[i] = alien.grow(d);
 		}
 
-		this.resultLabel.innerHTML = `
-			${((this.round < GameView.TotalRoundCount) ? (Strings.Round + " " + this.round + " " + Strings.of + " " + GameView.TotalRoundCount) : Strings.FinalRound)}
-			<br/>
-			${this.points} ${(this.points === 1 ? Strings.point : Strings.points)}
-		`;
+		for (let i = GameView.TotalRoundCount; i >= 1; i--) {
+			if (i > this.round)
+				this.resultLabelMarker[i - 1].classList.remove("done");
+			else
+				this.resultLabelMarker[i - 1].classList.add("done");
+
+			if (i >= this.round)
+				(this.resultLabelMarker[i - 1].firstChild as HTMLSpanElement).textContent = "";
+		}
+		this.resultLabelRound.textContent = Strings.Round + this.round;
+		this.resultLabelTotal.textContent = Strings.Total + this.points;
 
 		await delay(animationStartDelayMS);
 
@@ -319,6 +369,8 @@ class GameView extends View {
 
 		if (!this.alive)
 			return;
+
+		this.round++;
 
 		await this.displayAddedPoints(addedPoints);
 
@@ -429,7 +481,7 @@ class GameView extends View {
 						if (alien && alien.element && !alien.paused) {
 							alien.element.classList.add("moving");
 
-							this.alienRow.classList.add("target");
+							this.alienRow.classList.add("dragging");
 
 							this.movingInitialX = x;
 							this.movingInitialY = y;
@@ -461,21 +513,21 @@ class GameView extends View {
 		this.movingAlien = null;
 
 		const alienRow = this.alienRow,
-			tds = alienRow.children,
+			targets = alienRow.children,
 			x = e.clientX,
 			y = e.clientY;
 
-		alienRow.classList.remove("target");
+		alienRow.classList.remove("dragging");
 
 		movingAlien.element.classList.remove("moving");
 		movingAlien.element.style.transform = "";
 
 		let rect = alienRow.getBoundingClientRect();
 		if (y >= rect.top && y < rect.bottom) {
-			for (let i = tds.length - 1; i >= 0; i--) {
-				const td = tds[i];
-				if (!td.classList.contains("target") ||
-					x < (rect = td.getBoundingClientRect()).left ||
+			for (let i = targets.length - 1; i >= 0; i--) {
+				const target = targets[i];
+				if (!target.classList.contains("target") ||
+					x < (rect = target.getBoundingClientRect()).left ||
 					x >= rect.right)
 					continue;
 
@@ -490,7 +542,7 @@ class GameView extends View {
 					return;
 				}
 
-				if (td.childNodes.length) {
+				if (target.childNodes.length) {
 					this.gameOver("Não é permitido substituir um alienígina já posicionado!");
 					return;
 				}
@@ -498,20 +550,23 @@ class GameView extends View {
 				movingAlien.paused = true;
 				movingAlien.element.style.visibility = "hidden";
 
-				Alien.create(movingAlien.kind, td as HTMLElement, this.lastPlacedAlien).grow();
+				Alien.create(movingAlien.kind, target as HTMLElement, this.lastPlacedAlien).grow();
 
 				this.lastPlacedAlien++;
 
-				this.nextRoundButton.removeAttribute("disabled");
+				if (this.round < GameView.TotalRoundCount)
+					this.nextRoundButton.removeAttribute("disabled");
 
-				if (this.lastPlacedAlien >= GameView.MaximumAlienCount)
+				if (this.lastPlacedAlien >= GameView.MaximumAlienCount) {
+					this.nextRoundButton.removeAttribute("disabled");
 					this.nextRoundButton.replaceChild(document.createTextNode(Strings.Finish), this.nextRoundButton.childNodes[1]);
+				}
 			}
 		}
 	}
 
 	private outsidePointerHandler(e: Event): boolean {
-		return ((e.target && (e.target as HTMLElement).tagName === "TD" && (e.target as HTMLElement).childNodes.length) ? true : false);
+		return ((e.target && (e.target as HTMLElement).className === "target" && (e.target as HTMLElement).childNodes.length) ? true : false);
 	}
 
 	private render(time: number): void {

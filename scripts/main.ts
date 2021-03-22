@@ -27,6 +27,7 @@
 let scaleFactor = -1, widthCss = 0, heightCss = 0,
 	baseLeftCss = 0, baseTopCss = 0,
 	fontSize = 0, fontSizeCss = "0px",
+	musicPlaying = true, bgMusic = document.getElementById("bg-music") as HTMLAudioElement, musicButton: HTMLElement | null = null,
 	installationPrompt: Event | null = null,
 	landscapeWarning: HTMLDivElement | null = null;
 
@@ -207,10 +208,10 @@ function adjustWindowSize(): void {
 		landscapeWarning = null;
 	}
 
-	if (scaleFactor !== lastScaleFactor) {
-		View.main.style.width = baseWidthCss + "px";
-		View.main.style.height = baseHeightCss + "px";
+	View.main.style.width = baseWidthCss + "px";
+	View.main.style.height = baseHeightCss + "px";
 
+	if (scaleFactor !== lastScaleFactor) {
 		fontSize = (baseHeightCss / baseHeightFontUnits) | 0;
 		fontSizeCss = fontSize + "px";
 		if (document.documentElement)
@@ -218,16 +219,40 @@ function adjustWindowSize(): void {
 		document.body.style.fontSize = fontSizeCss;
 
 		View.windowResized(true);
-		Modal.windowResized();
 	} else {
 		View.windowResized(false);
 	}
+
+	Modal.windowResized();
 }
 
 function beforeInstallPrompt(e: Event): void {
 	if (("preventDefault" in e))
 		e.preventDefault();
 	installationPrompt = e;
+}
+
+function toggleMusic(e: Event): boolean {
+	if (musicPlaying === bgMusic.paused)
+		musicPlaying = !musicPlaying;
+
+	if (musicPlaying) {
+		musicPlaying = false;
+		bgMusic.pause();
+	} else {
+		musicPlaying = true;
+		bgMusic.play();
+	}
+
+	if (e.target && (e.target as HTMLElement).tagName)
+		(e.target as HTMLElement).textContent = (musicPlaying ? Strings.StopMusic : Strings.PlayMusic);
+
+	return true;
+}
+
+function updateMusicButton() {
+	if (musicButton)
+		musicButton.textContent = (musicPlaying ? Strings.StopMusic : Strings.PlayMusic);
 }
 
 let fullscreenChangedTimeout = 0;
@@ -330,6 +355,25 @@ function setup(): void {
 
 	function finishSetup() {
 		View.loading = false;
+
+		musicPlaying = !bgMusic.paused;
+
+		bgMusic.onplay = function () {
+			musicPlaying = true;
+			updateMusicButton();
+		};
+
+		bgMusic.onpause = function () {
+			musicPlaying = false;
+			updateMusicButton();
+		};
+
+		bgMusic.ontimeupdate = function() {
+			if (bgMusic.currentTime >= bgMusic.duration - 0.1){
+				bgMusic.currentTime = 0;
+				bgMusic.play();
+			}
+		};
 
 		View.createInitialView();
 	}

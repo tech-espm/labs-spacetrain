@@ -30,8 +30,9 @@ class TitleView extends View {
 	private readonly startButton: HTMLButtonElement;
 	private readonly rulesButton: HTMLButtonElement;
 	private readonly creditsButton: HTMLButtonElement;
+	private readonly musicButton: HTMLButtonElement;
+	private readonly fullscreenButton: HTMLButtonElement;
 	private readonly footer: HTMLDivElement;
-	private readonly fullscreenButton: HTMLButtonElement | null;
 
 	private fadeSequence: number;
 	private fadeElements: HTMLElement[] | null;
@@ -72,14 +73,15 @@ class TitleView extends View {
 		this.footer.textContent = "2021 - GameLab ESPM (@gamelab_espm) + Hub Arenas ESPM (@arenas_espm) - #GoGamers";
 		this.baseElement.appendChild(this.footer);
 
-		if (!isPWA) {
-			this.fullscreenButton = View.createWhiteButton(this.baseElement, Strings.Fullscreen, this.fullscreen.bind(this), "fade small");
-			this.fullscreenButton.style.position = "absolute";
-			this.fullscreenButton.style.right = "1.5rem";
-			this.fullscreenButton.style.bottom = "3rem";
-		} else {
-			this.fullscreenButton = null;
-		}
+		this.musicButton = View.createWhiteButton(this.baseElement, musicPlaying ? Strings.StopMusic : Strings.PlayMusic, toggleMusic, "fade small");
+		this.musicButton.style.position = "absolute";
+		this.musicButton.style.left = "1.5rem";
+		this.musicButton.style.bottom = "3rem";
+
+		this.fullscreenButton = View.createWhiteButton(this.baseElement, Strings.Fullscreen, this.fullscreen.bind(this), "fade small");
+		this.fullscreenButton.style.position = "absolute";
+		this.fullscreenButton.style.right = "1.5rem";
+		this.fullscreenButton.style.bottom = "3rem";
 
 		this.fadeSequence = 0;
 		this.fadeElements = null;
@@ -87,9 +89,13 @@ class TitleView extends View {
 	}
 
 	protected async attach(): Promise<void> {
+		musicButton = this.musicButton;
+		updateMusicButton();
 	}
 
 	protected async detach(): Promise<void> {
+		musicButton = null;
+
 		if (this.fadeInterval) {
 			clearInterval(this.fadeInterval);
 			this.fadeInterval = 0;
@@ -107,9 +113,7 @@ class TitleView extends View {
 		if (this.fadeSequence)
 			return;
 
-		const fadeElements = [this.logo, this.subtitle, this.startButton, this.rulesButton, this.creditsButton, this.footer];
-		if (this.fullscreenButton)
-			fadeElements.push(this.fullscreenButton);
+		const fadeElements = [this.logo, this.subtitle, this.startButton, this.rulesButton, this.creditsButton, this.footer, this.musicButton, this.fullscreenButton];
 		if (fadeSequence < 0)
 			fadeElements.reverse();
 
