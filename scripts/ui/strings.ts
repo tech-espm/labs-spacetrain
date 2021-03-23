@@ -52,6 +52,28 @@ class Strings {
 	public static START = "START";
 	public static RULES = "RULES";
 	public static CREDITS = "CREDITS";
+	public static Victory = `Your final score was {totalPoints}<br/>
+	<br/>
+	{regularPoints} points for boarded aliens<br/>
+	+<br/>
+	{extraPoints} bonus points for `;
+	public static VictorySpeciesSingular = ` single species`;
+	public static VictorySpeciesPlural = ` different species`;
+	public static GameOverReposition = "Repositioning aliens is not allowed!";
+	public static GameOverFirstAvailable = "New aliens must always be boarded in the first available position!";
+	public static GameOverReplace = "Replacing an already boarded alien is not allowed!";
+	public static CreditsHTML = `<h1 class="blue">GAME DESIGN</h2>
+	<p>Vince Vader</p>
+	<h1 class="green">PROGRAMMING</h2>
+	<p>Carlos Rafael das Neves</p>
+	<h1 class="orange">CREATIVE COORDINATION</h2>
+	<p>Eduardo Manente</p>
+	<h1 class="red">PLANNING COORDINATION</h2>
+	<p>Eric de Carvalho</p>
+	<h1 class="pink">LAYOUT AND SOUNDTRACK</h2>
+	<p>Camila Galastri Guedes</p>
+	<p>João Pedro Rabelo</p>
+	<p>Marcella Lizaso de Siqueira</p>`;
 
 	public static DecimalSeparator = ".";
 	public static OppositeDecimalSeparator = ",";
@@ -93,6 +115,28 @@ class Strings {
 			Strings.START = "INICIAR";
 			Strings.RULES = "REGRAS";
 			Strings.CREDITS = "CRÉDITOS";
+			Strings.Victory = `Sua pontuação final total foi {totalPoints}<br/>
+			<br/>
+			{regularPoints} pontos de aliens embarcados<br/>
+			+<br/>
+			{extraPoints} de bônus por `;
+			Strings.VictorySpeciesSingular = ` única espécie`;
+			Strings.VictorySpeciesPlural = ` espécies diferentes`;
+			Strings.GameOverReposition = "Não é permitido reposicionar os alienígenas!";
+			Strings.GameOverFirstAvailable = "Um novo alienígena deve sempre ser embarcado na primeira posição disponível!";
+			Strings.GameOverReplace = "Não é permitido substituir um alienígina já embarcado!";
+			Strings.CreditsHTML = `<h1 class="blue">GAME DESIGN</h2>
+			<p>Vince Vader</p>
+			<h1 class="green">PROGRAMAÇÃO</h2>
+			<p>Carlos Rafael das Neves</p>
+			<h1 class="orange">COORDENAÇÃO DE CRIAÇÃO</h2>
+			<p>Eduardo Manente</p>
+			<h1 class="red">COORDENAÇÃO DE PLANEJAMENTO</h2>
+			<p>Eric de Carvalho</p>
+			<h1 class="pink">LAYOUT E TRILHA SONORA</h2>
+			<p>Camila Galastri Guedes</p>
+			<p>João Pedro Rabelo</p>
+			<p>Marcella Lizaso de Siqueira</p>`;
 		
 			Strings.DecimalSeparator = ",";
 			Strings.OppositeDecimalSeparator = ".";

@@ -28,7 +28,7 @@ class RulesView extends View {
 	public constructor() {
 		super();
 
-		const backButton = View.createWhiteButton(this.baseElement, { imageId: Icon.Back, text: Strings.Close }, this.back.bind(this));
+		const backButton = View.createWhiteButton(this.baseElement, { imageId: Icon.Clear, text: Strings.Close }, this.back.bind(this), "small");
 		backButton.style.position = "absolute";
 		backButton.style.left = smallMarginCss;
 		backButton.style.top = smallMarginCss;

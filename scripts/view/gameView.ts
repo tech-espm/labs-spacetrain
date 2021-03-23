@@ -203,8 +203,8 @@ class GameView extends View {
 		return true;
 	}
 
-	private async displayAddedPoints(addedPoints: number): Promise<void> {
-		if (this.round > 1 && this.round <= (GameView.TotalRoundCount + 1))
+	private async displayAddedPoints(addedPoints: number, updateResultLabel: boolean): Promise<void> {
+		if (updateResultLabel && this.round > 1 && this.round <= GameView.TotalRoundCount)
 			(this.resultLabelMarker[this.round - 2].firstChild as HTMLSpanElement).textContent = addedPoints.toString();
 
 		if (!addedPoints)
@@ -276,7 +276,7 @@ class GameView extends View {
 				return;
 		}
 
-		this.displayAddedPoints(addedPoints);
+		this.displayAddedPoints(addedPoints, true);
 
 		const newPromises: Promise<void>[] = new Array(newAlienCount);
 
@@ -347,19 +347,48 @@ class GameView extends View {
 		this.nextRound();
 	}
 
+	private async showMessage(error: boolean, html: string): Promise<void> {
+		if (this.animating)
+			return;
+
+		this.animating = true;
+
+		return new Promise(async (resolve) => {
+			Modal.show({
+				html: html,
+				error: error,
+
+				onhidden: () => {
+					if (!this.alive)
+						return;
+
+					this.animating = false;
+
+					resolve();
+				}
+			});
+		});
+	}
+
 	private async gameOver(message: string): Promise<void> {
-		alert(message);
+		await this.showMessage(true, message);
+
+		if (!this.alive)
+			return;
 
 		this.animating = true;
 
 		await delay(slowAnimationTimeoutMS);
+
+		if (!this.alive)
+			return;
 
 		this.animating = false;
 
 		return this.restart();
 	}
 
-	private async gameFinished(addedPoints: number): Promise<void> {
+	private async gameFinished(addedPoints: number, typeCount: number, extraPoints: number): Promise<void> {
 
 		this.animating = true;
 
@@ -372,14 +401,21 @@ class GameView extends View {
 
 		this.round++;
 
-		await this.displayAddedPoints(addedPoints);
+		await this.displayAddedPoints(addedPoints, false);
 
 		if (!this.alive)
 			return;
 
 		this.animating = false;
 
-		alert("Vitória! " + this.points + " pontos!");
+		await this.showMessage(false, Strings.Victory
+			.replace("{totalPoints}", this.points.toString())
+			.replace("{regularPoints}", (this.points - extraPoints).toString())
+			.replace("{extraPoints}", extraPoints.toString())
+			+ typeCount + ((typeCount === 1) ? Strings.VictorySpeciesSingular : Strings.VictorySpeciesPlural));
+
+		if (!this.alive)
+			return;
 
 		this.restart();
 	}
@@ -410,9 +446,9 @@ class GameView extends View {
 		return points + GameView.PointsPerSequence[seq];
 	}
 
-	private computeExtraPoints(): number {
+	private computeExtraPoints(): { typeCount: number, extraPoints: number } {
 		if (!this.alienRow)
-			return 0;
+			return { typeCount: 0, extraPoints: 0 };
 
 		const alienElements = this.alienRow.getElementsByClassName("alien"),
 			types: number[] = new Array(Alien.KindCount);
@@ -427,7 +463,7 @@ class GameView extends View {
 				typeCount++;
 		}
 
-		return (3 * typeCount);
+		return { typeCount: typeCount, extraPoints: (3 * typeCount) };
 	}
 
 	private nextRound(): boolean {
@@ -441,10 +477,10 @@ class GameView extends View {
 		}
 
 		if (this.lastPlacedAlien >= GameView.MaximumAlienCount) {
-			const extraPoints = this.computeExtraPoints();
+			const { typeCount, extraPoints } = this.computeExtraPoints();
 			addedPoints += extraPoints;
 			this.points += extraPoints;
-			this.gameFinished(addedPoints);
+			this.gameFinished(addedPoints, typeCount, extraPoints);
 			return true;
 		}
 
@@ -533,17 +569,17 @@ class GameView extends View {
 
 				if (this.originalAlienPlacement >= 0) {
 					if (this.originalAlienPlacement !== i)
-						this.gameOver("Não é permitido reposicionar os alienígenas!");
+						this.gameOver(Strings.GameOverReposition);
 					return;
 				}
 
 				if (this.lastPlacedAlien !== i) {
-					this.gameOver("Um novo alienígena deve estar sempre na primeira posição disponível!");
+					this.gameOver(Strings.GameOverFirstAvailable);
 					return;
 				}
 
 				if (target.childNodes.length) {
-					this.gameOver("Não é permitido substituir um alienígina já posicionado!");
+					this.gameOver(Strings.GameOverReplace);
 					return;
 				}
 

@@ -93,6 +93,12 @@
 			line-height: 1;
 		}
 
+		h1, h2, h3, h4, h5, h6 {
+			font-size: 1rem;
+			font-weight: 700;
+			margin: 1rem 0 0;
+		}
+
 		#main, #fadeLeft, #fadeRight, div, .base-element, button {
 			margin: 0;
 			padding: 0;
@@ -258,10 +264,6 @@
 			line-height: 1.5;
 		}
 
-		p + p {
-			margin-top: 1rem;
-		}
-
 		small, .small, .fullscreen-button {
 			font-size: 0.75rem;
 		}
@@ -277,37 +279,33 @@
 			z-index: 1000;
 			background: rgba(47,14,82,0.75);
 			overflow: auto;
-			padding: 1rem;
-		}
-
-		@media (max-width: 350px) {
-			.modal-container {
-				padding: 0.5rem 0;
-			}
+			padding: 1rem 3rem;
 		}
 
 		.modal {
-			background: rgba(255,255,255,0.75);
-			width: 20rem;
-			margin: 0 auto;
-			max-width: 100%;
+			border-radius: 4rem;
+			font-size: 1rem;
+			line-height: 1.75rem;
+			font-weight: 700;
+			margin: 4rem auto 0;
+			padding: 1.5rem;
+			background-color: rgba(57,202,48,0.8);
+			color: #fff;
+			pointer-events: none;
+			text-align: center;
+		}
+
+		.modal.error {
+			background-color: rgba(255,29,37,0.8);
 		}
 
 		.modal.large {
+			border-radius: 0;
 			width: 100%;
 			margin: 0;
 		}
 
-		.modal-decoration {
-			background: rgba(255,255,255,0.5);
-			padding: 0.5rem;
-		}
-
-		.modal-body {
-			padding: 1rem 0.5rem;
-		}
-
-		.modal-body, .text-center {
+		.text-center {
 			text-align: center;
 		}
 
@@ -432,20 +430,6 @@
 			color: #000;
 			border-color: #ff7caf;
 			background-color: #ff7caf;
-		}
-
-		.modal a {
-			color: #04f;
-			text-decoration: none;
-		}
-
-		.modal a, .modal a:focus, .modal a:hover, .modal a:active {
-			outline: 0 none transparent;
-			background: none;
-		}
-
-		.modal a:focus, .modal a:active {
-			color: #008;
 		}
 
 		img, span, .no-pointer, .horizontal-spacer, .vertical-spacer {
@@ -673,7 +657,7 @@
 	<noscript>Sorry! You need to enable JavaScript in order to run the game :(</noscript>
 	<div id="main"></div>
 	<div id="cover" class="cover visible" style="transform: scale(999,999);"></div>
-	<audio id="bg-music" src="assets/sounds/bg.mp3" autoplay loop />
+	<audio id="bg-music" src="assets/sounds/bg.mp3" loop />
 
 	<script type="text/javascript">
 		//<![CDATA[
