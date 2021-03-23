@@ -133,7 +133,7 @@
 		#main {
 			position: absolute;
 			z-index: 1;
-			overflow: visible;
+			overflow: hidden;
 			background-image: url(assets/images/background.png);
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
@@ -642,14 +642,14 @@
 			font-size: 3rem;
 			text-align: center;
 			left: 0;
-			top: 0;
+			bottom: -3rem;
 			width: 100%;
 			pointer-events: none;
 		}
 
 		.added-points.fading {
 			opacity: 0;
-			transform: translate(0, 5rem);
+			transform: translate(0, -8rem);
 		}
 
 		.visible {
@@ -671,7 +671,7 @@
 </head>
 <body>
 	<noscript>Sorry! You need to enable JavaScript in order to run the game :(</noscript>
-	<div id="main"><div id="fadeLeft"></div><div id="fadeRight"></div></div>
+	<div id="main"></div>
 	<div id="cover" class="cover visible" style="transform: scale(999,999);"></div>
 	<audio id="bg-music" src="assets/sounds/bg.mp3" autoplay loop />
 

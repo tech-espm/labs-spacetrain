@@ -212,7 +212,7 @@ class GameView extends View {
 
 		const div = document.createElement("div");
 		div.className = "added-points";
-		div.textContent = `+ ${addedPoints} ${Strings.points}!`;
+		div.textContent = `+ ${addedPoints} ${((addedPoints === 1) ? Strings.point : Strings.points)}!`;
 		this.baseElement.appendChild(div);
 
 		await delay(animationStartDelayMS);

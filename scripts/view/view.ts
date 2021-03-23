@@ -36,8 +36,6 @@ interface ButtonCallback {
 abstract class View {
 	public static readonly main = document.getElementById("main") as HTMLDivElement;
 	public static readonly cover = document.getElementById("cover") as HTMLDivElement;
-	private static readonly fadeLeft = document.getElementById("fadeLeft") as HTMLDivElement;
-	private static readonly fadeRight = document.getElementById("fadeRight") as HTMLDivElement;
 
 	private static _loading = false;
 	private static _fading = false;
@@ -96,39 +94,7 @@ abstract class View {
 	}
 
 	public static windowResized(elementSizeChanged: boolean): void {
-		if (baseLeftCss < 8) {
-			if (!View.fadeLeft.style.backgroundColor) {
-				const color = "#2f0e52";
-				View.fadeLeft.style.backgroundColor = color;
-				View.fadeRight.style.backgroundColor = color;
-				View.fadeLeft.style.backgroundImage = "none";
-				View.fadeRight.style.backgroundImage = "none";
-			}
-		} else {
-			if (View.fadeLeft.style.backgroundColor) {
-				View.fadeLeft.style.backgroundColor = "";
-				View.fadeRight.style.backgroundColor = "";
-				View.fadeLeft.style.backgroundImage = "";
-				View.fadeRight.style.backgroundImage = "";
-			}
-		}
-
-		if (!elementSizeChanged)
-			return;
-
-		if (baseTopCss) {
-			if (!View.fadeLeft.style.display) {
-				View.fadeLeft.style.display = "none";
-				View.fadeRight.style.display = "none";
-			}
-		} else {
-			if (View.fadeLeft.style.display) {
-				View.fadeLeft.style.display = "";
-				View.fadeRight.style.display = "";
-			}
-		}
-
-		if (View.currentView)
+		if (elementSizeChanged && View.currentView)
 			View.currentView.resize();
 	}
 
