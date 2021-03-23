@@ -75,7 +75,7 @@ class Strings {
 	<p>João Pedro Rabelo</p>
 	<p>Marcella Lizaso de Siqueira</p>
 	<div class="insta">
-	<h1>FOLLOW ON INSTAGRAM</h1>
+	<h1>INSTAGRAM</h1>
 	<p><a target="_blank" href="https://www.instagram.com/gamelab_espm/">@gamelab_espm</a></p>
 	<p><a target="_blank" href="https://www.instagram.com/techespm/">@techespm</a></p>
 	<p><a target="_blank" href="https://www.instagram.com/arenas_espm/">@arenas_espm</a></p>
