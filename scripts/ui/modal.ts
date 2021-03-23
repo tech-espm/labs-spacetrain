@@ -96,7 +96,7 @@ class Modal {
 			this.modalElement.appendChild(options.html as HTMLElement);
 
 		this.containerElement.appendChild(this.modalElement);
-		View.main.appendChild(this.containerElement);
+		document.body.appendChild(this.containerElement);
 
 		this.boundDocumentKeyDown = this.documentKeyDown.bind(this);
 		document.addEventListener("keydown", this.boundDocumentKeyDown, true);
@@ -144,7 +144,7 @@ class Modal {
 			if (this.options.onhidden)
 				this.options.onhidden();
 
-			View.main.removeChild(this.containerElement);
+			document.body.removeChild(this.containerElement);
 
 			zeroObject(this.options);
 			zeroObject(this);

@@ -86,6 +86,12 @@
 			background: #2f0e52; /* Safari for iOS and Opera for Android in fullscreen mode?!?! */
 		}
 
+		body {
+			background-image: url(assets/images/background.png);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+
 		html, body, button, input, textarea, select, h1, h2, h3, h4, h5, h6 {
 			font-family: 'Orbitron', sans-serif;
 			font-style: normal;
@@ -136,13 +142,33 @@
 			transform-origin: left top;
 		}
 
+		.text-protection {
+			position: absolute;
+			z-index: 0;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			pointer-events: none;
+			background-color: rgba(47,14,82,0.75);
+		}
+
+		.insta {
+			font-size: 0.75rem;
+			position: absolute;
+			right: 0.5rem;
+			bottom: 0.5rem;
+		}
+
+		.insta a {
+			color: #ff9400;
+			text-decoration: none;
+		}
+
 		#main {
 			position: absolute;
 			z-index: 1;
 			overflow: hidden;
-			background-image: url(assets/images/background.png);
-			background-repeat: no-repeat;
-			background-size: 100% 100%;
 			/*
 			-moz-backface-visibility: hidden;
 			-webkit-backface-visibility: hidden;

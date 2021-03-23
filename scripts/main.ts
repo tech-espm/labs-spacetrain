@@ -190,7 +190,7 @@ function adjustWindowSize(): void {
 	View.main.style.left = baseLeftCss + "px";
 	View.main.style.top = baseTopCss + "px";
 
-	if (baseTopCss) {
+	if (widthCss <= heightCss) {
 		if (!landscapeWarning) {
 			landscapeWarning = document.createElement("div");
 			landscapeWarning.style.pointerEvents = "none";
@@ -366,13 +366,6 @@ function setup(): void {
 		bgMusic.onpause = function () {
 			musicPlaying = false;
 			updateMusicButton();
-		};
-
-		bgMusic.ontimeupdate = function() {
-			if (bgMusic.currentTime >= bgMusic.duration - 0.1){
-				bgMusic.currentTime = 0;
-				bgMusic.play();
-			}
 		};
 
 		View.createInitialView();

@@ -73,7 +73,13 @@ class Strings {
 	<h1 class="pink">LAYOUT AND SOUNDTRACK</h2>
 	<p>Camila Galastri Guedes</p>
 	<p>João Pedro Rabelo</p>
-	<p>Marcella Lizaso de Siqueira</p>`;
+	<p>Marcella Lizaso de Siqueira</p>
+	<div class="insta">
+	<h1>FOLLOW ON INSTAGRAM</h1>
+	<p><a target="_blank" href="https://www.instagram.com/gamelab_espm/">@gamelab_espm</a></p>
+	<p><a target="_blank" href="https://www.instagram.com/techespm/">@techespm</a></p>
+	<p><a target="_blank" href="https://www.instagram.com/arenas_espm/">@arenas_espm</a></p>
+	</div>`;
 
 	public static DecimalSeparator = ".";
 	public static OppositeDecimalSeparator = ",";
@@ -136,7 +142,13 @@ class Strings {
 			<h1 class="pink">LAYOUT E TRILHA SONORA</h2>
 			<p>Camila Galastri Guedes</p>
 			<p>João Pedro Rabelo</p>
-			<p>Marcella Lizaso de Siqueira</p>`;
+			<p>Marcella Lizaso de Siqueira</p>
+			<div class="insta">
+			<h1>SIGA NO INSTA</h1>
+			<p><a target="_blank" href="https://www.instagram.com/gamelab_espm/">@gamelab_espm</a></p>
+			<p><a target="_blank" href="https://www.instagram.com/techespm/">@techespm</a></p>
+			<p><a target="_blank" href="https://www.instagram.com/arenas_espm/">@arenas_espm</a></p>
+			</div>`;
 		
 			Strings.DecimalSeparator = ",";
 			Strings.OppositeDecimalSeparator = ".";

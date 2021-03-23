@@ -32,7 +32,6 @@ class TitleView extends View {
 	private readonly creditsButton: HTMLButtonElement;
 	private readonly musicButton: HTMLButtonElement;
 	private readonly fullscreenButton: HTMLButtonElement;
-	private readonly footer: HTMLDivElement;
 
 	private fadeSequence: number;
 	private fadeElements: HTMLElement[] | null;
@@ -67,11 +66,6 @@ class TitleView extends View {
 		this.baseElement.appendChild(document.createElement("br"));
 		this.creditsButton = View.createPinkButton(this.baseElement, Strings.CREDITS, this.credits.bind(this), "fade");
 		this.creditsButton.style.marginBottom = largeMarginCss;
-
-		this.footer = document.createElement("div");
-		this.footer.className = "green small fade";
-		this.footer.textContent = "2021 - GameLab ESPM (@gamelab_espm) + Hub Arenas ESPM (@arenas_espm) - #GoGamers";
-		this.baseElement.appendChild(this.footer);
 
 		this.musicButton = View.createWhiteButton(this.baseElement, musicPlaying ? Strings.StopMusic : Strings.PlayMusic, toggleMusic, "fade small");
 		this.musicButton.style.position = "absolute";
@@ -113,7 +107,7 @@ class TitleView extends View {
 		if (this.fadeSequence)
 			return;
 
-		const fadeElements = [this.logo, this.subtitle, this.startButton, this.rulesButton, this.creditsButton, this.footer, this.musicButton, this.fullscreenButton];
+		const fadeElements = [this.logo, this.subtitle, this.startButton, this.rulesButton, this.creditsButton, this.musicButton, this.fullscreenButton];
 		if (fadeSequence < 0)
 			fadeElements.reverse();
 

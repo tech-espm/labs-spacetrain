@@ -25,6 +25,8 @@
 //
 
 class CreditsView extends View {
+	private readonly textProtection: HTMLDivElement;
+
 	public constructor() {
 		super();
 
@@ -41,13 +43,16 @@ class CreditsView extends View {
 		div.innerHTML = Strings.CreditsHTML;
 		this.baseElement.appendChild(div);
 
-		this.baseElement.style.backgroundColor = "rgba(47,14,82,0.75)";
+		this.textProtection = document.createElement("div");
+		this.textProtection.className = "text-protection";
 	}
 
 	protected async attach(): Promise<void> {
+		document.body.insertBefore(this.textProtection, document.body.firstChild);
 	}
 
 	protected async detach(): Promise<void> {
+		document.body.removeChild(this.textProtection);
 	}
 
 	protected destroyInternal(partial: boolean): void {
