@@ -32,8 +32,8 @@ class CreditsView extends View {
 
 		const backButton = View.createWhiteButton(this.baseElement, { imageId: Icon.Clear, text: Strings.Close }, this.back.bind(this), "small");
 		backButton.style.position = "absolute";
-		backButton.style.left = smallMarginCss;
-		backButton.style.top = smallMarginCss;
+		backButton.style.left = extraLargeMarginCss;
+		backButton.style.top = extraLargeMarginCss;
 
 		const div = document.createElement("div");
 		div.className = "text-center";

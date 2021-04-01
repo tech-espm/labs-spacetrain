@@ -65,19 +65,19 @@ class GameView extends View {
 
 		const backButton = View.createWhiteButton(this.baseElement, { imageId: Icon.Clear, text: Strings.Close }, this.back.bind(this), "small");
 		backButton.style.position = "absolute";
-		backButton.style.left = smallMarginCss;
-		backButton.style.top = smallMarginCss;
+		backButton.style.left = extraLargeMarginCss;
+		backButton.style.top = extraLargeMarginCss;
 
-		const nextRoundButton = View.createBlueButton(this.baseElement, { imageId: Icon.Accept, text: Strings.NextRound }, this.nextRound.bind(this), "small fade visible");
+		const nextRoundButton = View.createBlueButton(this.baseElement, { imageId: Icon.Accept, text: Strings.NextRound }, this.nextRound.bind(this), "fade small visible");
 		nextRoundButton.setAttribute("disabled", "disabled");
 		nextRoundButton.style.position = "absolute";
-		nextRoundButton.style.right = smallMarginCss;
-		nextRoundButton.style.top = smallMarginCss;
+		nextRoundButton.style.right = extraLargeMarginCss;
+		nextRoundButton.style.top = extraLargeMarginCss;
 		this.nextRoundButton = nextRoundButton;
 
 		const shelf = document.createElement("div");
 		shelf.style.pointerEvents = "none";
-		shelf.style.marginTop = alienHeightCss;
+		shelf.style.marginTop = (alienHeightRem + extraLargeMarginRem) + "rem";
 		shelf.style.height = alienHeightCss;
 		this.shelf = shelf;
 		this.baseElement.appendChild(shelf);
@@ -129,9 +129,8 @@ class GameView extends View {
 
 		this.musicButton = View.createWhiteButton(this.baseElement, musicPlaying ? Strings.StopMusic : Strings.PlayMusic, toggleMusic, "fade small visible");
 		this.musicButton.style.position = "absolute";
-		this.musicButton.style.fontSize = "0.5rem";
-		this.musicButton.style.left = "1.5rem";
-		this.musicButton.style.bottom = "1.5rem";
+		this.musicButton.style.left = extraLargeMarginCss;
+		this.musicButton.style.bottom = extraLargeMarginCss;
 
 		this.baseElement.appendChild(this.musicButton);
 

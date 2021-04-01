@@ -69,13 +69,13 @@ class TitleView extends View {
 
 		this.musicButton = View.createWhiteButton(this.baseElement, musicPlaying ? Strings.StopMusic : Strings.PlayMusic, toggleMusic, "fade small");
 		this.musicButton.style.position = "absolute";
-		this.musicButton.style.left = "1.5rem";
-		this.musicButton.style.bottom = "3rem";
+		this.musicButton.style.left = extraLargeMarginCss;
+		this.musicButton.style.bottom = extraLargeMarginCss;
 
 		this.fullscreenButton = View.createWhiteButton(this.baseElement, Strings.Fullscreen, this.fullscreen.bind(this), "fade small");
 		this.fullscreenButton.style.position = "absolute";
-		this.fullscreenButton.style.right = "1.5rem";
-		this.fullscreenButton.style.bottom = "3rem";
+		this.fullscreenButton.style.right = extraLargeMarginCss;
+		this.fullscreenButton.style.bottom = extraLargeMarginCss;
 
 		this.fadeSequence = 0;
 		this.fadeElements = null;

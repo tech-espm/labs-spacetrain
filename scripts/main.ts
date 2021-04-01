@@ -27,7 +27,9 @@
 let scaleFactor = -1, widthCss = 0, heightCss = 0,
 	baseLeftCss = 0, baseTopCss = 0,
 	fontSize = 0, fontSizeCss = "0px",
-	musicPlaying = true, bgMusic = document.getElementById("bg-music") as HTMLAudioElement, musicButton: HTMLElement | null = null,
+	musicPlaying = false,
+	audioContext: AudioContext | null = null, audioBuffer: AudioBuffer | null = null, audioBufferSource: AudioBufferSourceNode | null = null,
+	bgMusic: HTMLAudioElement | null = null, musicButton: HTMLElement | null = null,
 	installationPrompt: Event | null = null,
 	landscapeWarning: HTMLDivElement | null = null;
 
@@ -233,15 +235,40 @@ function beforeInstallPrompt(e: Event): void {
 }
 
 function toggleMusic(e: Event): boolean {
-	if (musicPlaying === bgMusic.paused)
-		musicPlaying = !musicPlaying;
+	if (bgMusic) {
+		if (musicPlaying === bgMusic.paused)
+			musicPlaying = !musicPlaying;
 
-	if (musicPlaying) {
-		musicPlaying = false;
-		bgMusic.pause();
-	} else {
-		musicPlaying = true;
-		bgMusic.play();
+		if (musicPlaying) {
+			musicPlaying = false;
+			bgMusic.pause();
+		} else {
+			musicPlaying = true;
+			bgMusic.play();
+		}
+	} else if (audioContext && audioBuffer) {
+		try {
+			if (audioBufferSource) {
+				audioBufferSource.stop();
+				audioBufferSource.disconnect();
+				audioBufferSource = null;
+			}
+
+			if (musicPlaying) {
+				audioContext.suspend();
+				musicPlaying = false;
+			} else {
+				audioContext.resume();
+				audioBufferSource = audioContext.createBufferSource();
+				audioBufferSource.buffer = audioBuffer;
+				audioBufferSource.loop = true;
+				audioBufferSource.connect(audioContext.destination);
+				audioBufferSource.start();
+				musicPlaying = true;
+			}
+		} catch (ex) {
+			// Just ignore...
+		}
 	}
 
 	if (e.target && (e.target as HTMLElement).tagName)
@@ -353,25 +380,50 @@ function setup(): void {
 
 	FullscreenControl.onfullscreenchange = fullscreenChanged;
 
+	async function preloadAudio(): Promise<void> {
+		try {
+			if (("AudioContext" in window) && ("AudioBuffer" in window) && ("AudioBufferSourceNode" in window) && ("fetch" in window)) {
+				audioContext = new AudioContext();
+				audioContext.suspend();
+				audioBuffer = await audioContext.decodeAudioData(await (await fetch("assets/sounds/bg.mp3")).arrayBuffer());
+				return;
+			}
+		} catch (ex) {
+			// Just ignore an fall to the classic method
+			audioContext = null;
+			audioBuffer = null;
+		}
+		bgMusic = document.createElement("audio");
+		bgMusic.loop = true;
+		bgMusic.src = "assets/sounds/bg.mp3";
+		document.body.appendChild(bgMusic);
+		bgMusic.load();
+	}
+
 	function finishSetup() {
 		View.loading = false;
 
-		musicPlaying = !bgMusic.paused;
+		//musicPlaying = !bgMusic.paused;
 
-		bgMusic.onplay = function () {
-			musicPlaying = true;
-			updateMusicButton();
-		};
+		if (bgMusic) {
+			bgMusic.onplay = function () {
+				musicPlaying = true;
+				updateMusicButton();
+			};
 
-		bgMusic.onpause = function () {
-			musicPlaying = false;
-			updateMusicButton();
-		};
+			bgMusic.onpause = function () {
+				musicPlaying = false;
+				updateMusicButton();
+			};
+		}
 
 		View.createInitialView();
 	}
 
-	Alien.preloadAllImages().then(finishSetup, finishSetup);
+	Promise.all([
+		preloadAudio(),
+		Alien.preloadAllImages()
+	]).then(finishSetup, finishSetup);
 }
 
 (window as any)["spacetrainStepMAIN"] = true;

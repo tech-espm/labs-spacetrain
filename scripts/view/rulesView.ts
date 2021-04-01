@@ -30,8 +30,8 @@ class RulesView extends View {
 
 		const backButton = View.createWhiteButton(this.baseElement, { imageId: Icon.Clear, text: Strings.Close }, this.back.bind(this), "small");
 		backButton.style.position = "absolute";
-		backButton.style.left = smallMarginCss;
-		backButton.style.top = smallMarginCss;
+		backButton.style.left = extraLargeMarginCss;
+		backButton.style.top = extraLargeMarginCss;
 	}
 
 	protected async attach(): Promise<void> {
