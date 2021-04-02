@@ -28,11 +28,12 @@ class RulesView extends View {
 	private static readonly TotalRuleCount = 5;
 
 	private previousRuleButton: HTMLDivElement;
-	private ruleImage: HTMLImageElement;
+	private ruleImageContainer: HTMLDivElement;
 	private nextRuleButton: HTMLDivElement;
 
 	private fadingRule: boolean;
 	private currentRule: number;
+	private ruleImage: HTMLImageElement[];
 	private ruleMarker: HTMLSpanElement[];
 
 	public constructor() {
@@ -57,11 +58,11 @@ class RulesView extends View {
 		this.previousRuleButton = previousRuleButton;
 		ruleContainer.appendChild(previousRuleButton);
 
-		const ruleImage = document.createElement("img");
-		ruleImage.className = "rule-image fade visible";
-		ruleImage.src = "assets/images/rule0.png";
-		this.ruleImage = ruleImage;
-		ruleContainer.appendChild(ruleImage);
+		const ruleImageContainer = document.createElement("div");
+		ruleImageContainer.className = "rule-image";
+		ruleImageContainer.style.background = "none";
+		this.ruleImageContainer = ruleImageContainer;
+		ruleContainer.appendChild(ruleImageContainer);
 
 		const nextRuleButton = document.createElement("div");
 		nextRuleButton.className = "rule-next fade visible";
@@ -74,8 +75,14 @@ class RulesView extends View {
 		const ruleLabel = document.createElement("div");
 		ruleLabel.className = "result-label visible";
 
+		const ruleImage: HTMLImageElement[] = new Array(RulesView.TotalRuleCount);
 		const ruleMarker: HTMLSpanElement[] = new Array(RulesView.TotalRuleCount);
 		for (let i = 0; i < RulesView.TotalRuleCount; i++) {
+			const image = document.createElement("img");
+			image.className = (i ? "rule-image fade" : "rule-image fade visible");
+			image.src = `assets/images/rule${i}.png`;
+			ruleImage[i] = image;
+
 			const marker = document.createElement("span");
 			marker.className = (i ? "marker" : "marker done");
 			ruleLabel.appendChild(marker);
@@ -84,7 +91,9 @@ class RulesView extends View {
 			points.className = "points";
 			marker.appendChild(points);
 		}
+		this.ruleImage = ruleImage;
 		this.ruleMarker = ruleMarker;
+		ruleImageContainer.appendChild(ruleImage[0]);
 
 		const ruleLabelRow2 = document.createElement("div");
 		ruleLabelRow2.className = "row2";
@@ -128,7 +137,7 @@ class RulesView extends View {
 		else
 			this.nextRuleButton.classList.remove("visible");
 
-		this.ruleImage.classList.remove("visible");
+		this.ruleImage[this.currentRule].classList.remove("visible");
 
 		await delay(slowAnimationTimeoutMS);
 
@@ -140,11 +149,12 @@ class RulesView extends View {
 				ruleMarker[i].classList.remove("done");
 		}
 
-		this.ruleImage.src = `assets/images/rule${newRule}.png`;
+		this.ruleImageContainer.removeChild(this.ruleImage[this.currentRule]);
+		this.ruleImageContainer.appendChild(this.ruleImage[newRule]);
 
-		await delay(fastAnimationTimeoutMS);
+		await delay(animationStartDelayMS);
 
-		this.ruleImage.classList.add("visible");
+		this.ruleImage[newRule].classList.add("visible");
 		this.currentRule = newRule;
 
 		await delay(slowAnimationTimeoutMS);
