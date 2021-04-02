@@ -141,6 +141,9 @@ class RulesView extends View {
 		}
 
 		this.ruleImage.src = `assets/images/rule${newRule}.png`;
+
+		await delay(fastAnimationTimeoutMS);
+
 		this.ruleImage.classList.add("visible");
 		this.currentRule = newRule;
 
