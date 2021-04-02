@@ -381,6 +381,7 @@ function setup(): void {
 	FullscreenControl.onfullscreenchange = fullscreenChanged;
 
 	async function preloadAudio(): Promise<void> {
+		/*
 		try {
 			if (("AudioContext" in window) && ("AudioBuffer" in window) && ("AudioBufferSourceNode" in window) && ("fetch" in window)) {
 				audioContext = new AudioContext();
@@ -393,9 +394,10 @@ function setup(): void {
 			audioContext = null;
 			audioBuffer = null;
 		}
+		*/
 		bgMusic = document.createElement("audio");
 		bgMusic.loop = true;
-		bgMusic.src = "assets/sounds/bg.mp3";
+		bgMusic.src = "assets/sounds/bgfade.mp3";
 		document.body.appendChild(bgMusic);
 		bgMusic.load();
 	}
