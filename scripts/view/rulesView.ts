@@ -34,7 +34,7 @@ class RulesView extends View {
 	private fadingRule: boolean;
 	private currentRule: number;
 	private ruleImage: HTMLImageElement[];
-	private ruleMarker: HTMLSpanElement[];
+	//private ruleMarker: HTMLSpanElement[];
 
 	public constructor() {
 		super();
@@ -72,17 +72,20 @@ class RulesView extends View {
 
 		this.baseElement.appendChild(ruleContainer);
 
+		/*
 		const ruleLabel = document.createElement("div");
 		ruleLabel.className = "result-label visible";
+		*/
 
 		const ruleImage: HTMLImageElement[] = new Array(RulesView.TotalRuleCount);
-		const ruleMarker: HTMLSpanElement[] = new Array(RulesView.TotalRuleCount);
+		//const ruleMarker: HTMLSpanElement[] = new Array(RulesView.TotalRuleCount);
 		for (let i = 0; i < RulesView.TotalRuleCount; i++) {
 			const image = document.createElement("img");
 			image.className = (i ? "rule-image fade" : "rule-image fade visible");
 			image.src = `assets/images/rule${i}.png`;
 			ruleImage[i] = image;
 
+			/*
 			const marker = document.createElement("span");
 			marker.className = (i ? "marker" : "marker done");
 			ruleLabel.appendChild(marker);
@@ -90,17 +93,20 @@ class RulesView extends View {
 			const points = document.createElement("span");
 			points.className = "points";
 			marker.appendChild(points);
+			*/
 		}
 		this.ruleImage = ruleImage;
-		this.ruleMarker = ruleMarker;
+		//this.ruleMarker = ruleMarker;
 		ruleImageContainer.appendChild(ruleImage[0]);
 
+		/*
 		const ruleLabelRow2 = document.createElement("div");
 		ruleLabelRow2.className = "row2";
 		ruleLabelRow2.innerHTML = `<s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</s><img src="assets/images/logo-small.png" /><s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</s>`;
 		ruleLabel.appendChild(ruleLabelRow2);
 
 		this.baseElement.appendChild(ruleLabel);
+		*/
 	}
 
 	protected async attach(): Promise<void> {
@@ -118,7 +124,7 @@ class RulesView extends View {
 	}
 
 	private async changeRule(delta: number): Promise<void> {
-		if (View.fading || this.fadingRule || !this.ruleMarker)
+		if (View.fading || this.fadingRule || !this.ruleImage)
 			return;
 
 		const newRule = this.currentRule + delta;
@@ -141,6 +147,7 @@ class RulesView extends View {
 
 		await delay(slowAnimationTimeoutMS);
 
+		/*
 		const ruleMarker = this.ruleMarker;
 		for (let i = 0; i < RulesView.TotalRuleCount; i++) {
 			if (i <= newRule)
@@ -148,6 +155,7 @@ class RulesView extends View {
 			else
 				ruleMarker[i].classList.remove("done");
 		}
+		*/
 
 		this.ruleImageContainer.removeChild(this.ruleImage[this.currentRule]);
 		this.ruleImageContainer.appendChild(this.ruleImage[newRule]);

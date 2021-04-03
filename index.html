@@ -189,10 +189,6 @@
 			height: 4.5rem;
 		}
 
-		.train.dragging > .target:hover {
-			background-color: rgba(255,255,255,0.5);
-		}
-
 		.target {
 			display: inline-block;
 			vertical-align: top;
@@ -200,9 +196,14 @@
 			border-radius: 0.489008043rem;
 			width: 3.463806971rem;
 			height: 3.361930295rem;
+			background-color: rgba(255,255,255,0);
 			-webkit-transition: background-color ease-in-out 0.3s;
 			-o-transition: background-color ease-in-out 0.3s;
 			transition: background-color ease-in-out 0.3s;
+		}
+
+		.target.hover {
+			background-color: rgba(255,255,255,0.5);
 		}
 
 		.target + .target {
@@ -585,13 +586,13 @@
 		}
 
 		.rule-container {
-			margin-top: 2.5rem;
+			margin-top: 4rem;
 		}
 
 		.rule-prev, .rule-next {
 			display: inline-block;
-			width: 3rem;
-			height: 9rem;
+			width: 2.5rem;
+			height: 7.5rem;
 			vertical-align: middle;
 			background-position: left top;
 			background-size: 100% 100%;
@@ -600,19 +601,19 @@
 		}
 
 		.rule-prev {
-			margin-right: 1rem;
+			margin-right: 0.5rem;
 			background-image: url('assets/images/prev.svg');
 		}
 
 		.rule-next {
-			margin-left: 1rem;
+			margin-left: 0.5rem;
 			background-image: url('assets/images/next.svg');
 		}
 
 		.rule-image {
 			display: inline-block;
-			width: 24.32rem;
-			height: 13rem;
+			width: 31.8rem;
+			height: 17rem;
 			vertical-align: middle;
 			background-image: url('assets/images/loading.gif');
 			background-position: center;

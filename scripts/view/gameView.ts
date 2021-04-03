@@ -38,6 +38,8 @@ class GameView extends View {
 	private nextRoundButton: HTMLButtonElement;
 	private shelf: HTMLDivElement;
 	private alienRow: HTMLDivElement;
+	private targets: HTMLDivElement[];
+	private lastHoverTarget: number;
 	private resultLabel: HTMLDivElement;
 	private resultLabelRound: HTMLSpanElement;
 	private resultLabelMarker: HTMLSpanElement[];
@@ -85,10 +87,14 @@ class GameView extends View {
 		const alienRow = document.createElement("div");
 		alienRow.className = "train";
 		this.alienRow = alienRow;
+		const targets = new Array(GameView.MaximumAlienCount);
+		this.targets = targets;
+		this.lastHoverTarget = -1;
 
-		for (let i = GameView.MaximumAlienCount - 1; i >= 0; i--) {
+		for (let i = 0; i < targets.length; i++) {
 			const target = document.createElement("div");
 			target.className = "target";
+			targets[i] = target;
 			alienRow.appendChild(target);
 		}
 
@@ -494,6 +500,26 @@ class GameView extends View {
 		return true;
 	}
 
+	private getTarget(x: number, y: number): number {
+		const alienRow = this.alienRow;
+
+		let rect = alienRow.getBoundingClientRect();
+		if (y >= rect.top && y < rect.bottom) {
+			const targets = this.targets;
+
+			for (let i = targets.length - 1; i >= 0; i--) {
+				const target = targets[i];
+				if (x < (rect = target.getBoundingClientRect()).left ||
+					x >= rect.right)
+					continue;
+
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	private mouseDown(e: MouseEvent): boolean {
 		if (!this.alive || this.animating)
 			return false;
@@ -501,27 +527,37 @@ class GameView extends View {
 		const x = e.clientX,
 			y = e.clientY,
 			containers: HTMLElement[] = [this.shelf, this.alienRow];
-		
+
 		for (let i = containers.length - 1; i >= 0; i--) {
 			const alienElements = containers[i].getElementsByClassName("alien");
 			let rect = containers[i].getBoundingClientRect();
 
 			if (y >= rect.top && y < rect.bottom && alienElements && alienElements.length) {
-				for (let i = alienElements.length - 1; i >= 0; i--) {
-					rect = alienElements[i].getBoundingClientRect();
+				for (let j = alienElements.length - 1; j >= 0; j--) {
+					rect = alienElements[j].getBoundingClientRect();
 
 					if (x >= rect.left && x < rect.right) {
-						const alien = Alien.fromElement(alienElements[i]);
+						const alien = Alien.fromElement(alienElements[j]);
 
 						if (alien && alien.element && !alien.paused) {
 							alien.element.classList.add("moving");
-
-							this.alienRow.classList.add("dragging");
 
 							this.movingInitialX = x;
 							this.movingInitialY = y;
 							this.movingAlien = alien;
 							this.originalAlienPlacement = alien.placement;
+
+							if (this.lastHoverTarget >= 0) {
+								this.targets[this.lastHoverTarget].classList.remove("hover");
+								this.lastHoverTarget = -1;
+							}
+
+							if (i === 1) {
+								this.lastHoverTarget = this.getTarget(x, y);
+
+								if (this.lastHoverTarget >= 0)
+									this.targets[this.lastHoverTarget].classList.add("hover");
+							}
 
 							return true;
 						}
@@ -534,13 +570,38 @@ class GameView extends View {
 	}
 
 	private mouseMove(e: MouseEvent): void {
-		if (!this.movingAlien || !this.movingAlien.element)
+		const movingAlien = this.movingAlien;
+		if (!movingAlien || !movingAlien.element)
 			return;
 
-		this.movingAlien.element.style.transform = `translate(${(e.clientX - this.movingInitialX)}px, ${(e.clientY - this.movingInitialY)}px)`;
+		const x = e.clientX,
+			y = e.clientY;
+
+		movingAlien.element.style.transform = `translate(${(x - this.movingInitialX)}px, ${(y - this.movingInitialY)}px)`;
+
+		// We cannot count on :hover because it does not always work on mobile devices
+		const target = this.getTarget(x, y);
+		if (target === this.lastHoverTarget)
+			return;
+
+		const targets = this.targets;
+
+		if (this.lastHoverTarget >= 0)
+			targets[this.lastHoverTarget].classList.remove("hover");
+
+		if (target >= 0)
+			targets[target].classList.add("hover");
+
+		this.lastHoverTarget = target;
 	}
 
 	private mouseUp(e: MouseEvent): void {
+		const targets = this.targets;
+		if (this.lastHoverTarget >= 0) {
+			targets[this.lastHoverTarget].classList.remove("hover");
+			this.lastHoverTarget = -1;
+		}
+
 		const movingAlien = this.movingAlien;
 		if (!movingAlien || !movingAlien.element)
 			return;
@@ -548,55 +609,43 @@ class GameView extends View {
 		this.movingAlien = null;
 
 		const alienRow = this.alienRow,
-			targets = alienRow.children,
-			x = e.clientX,
-			y = e.clientY;
-
-		alienRow.classList.remove("dragging");
+			target = this.getTarget(e.clientX, e.clientY);
 
 		movingAlien.element.classList.remove("moving");
 		movingAlien.element.style.transform = "";
 
-		let rect = alienRow.getBoundingClientRect();
-		if (y >= rect.top && y < rect.bottom) {
-			for (let i = targets.length - 1; i >= 0; i--) {
-				const target = targets[i];
-				if (!target.classList.contains("target") ||
-					x < (rect = target.getBoundingClientRect()).left ||
-					x >= rect.right)
-					continue;
+		if (target < 0)
+			return;
 
-				if (this.originalAlienPlacement >= 0) {
-					if (this.originalAlienPlacement !== i)
-						this.gameOver(Strings.GameOverReposition);
-					return;
-				}
+		if (this.originalAlienPlacement >= 0) {
+			if (this.originalAlienPlacement !== target)
+				this.gameOver(Strings.GameOverReposition);
+			return;
+		}
 
-				if (this.lastPlacedAlien !== i) {
-					this.gameOver(Strings.GameOverFirstAvailable);
-					return;
-				}
+		if (targets[target].childNodes.length) {
+			this.gameOver(Strings.GameOverReplace);
+			return;
+		}
 
-				if (target.childNodes.length) {
-					this.gameOver(Strings.GameOverReplace);
-					return;
-				}
+		if (this.lastPlacedAlien !== target) {
+			this.gameOver(Strings.GameOverFirstAvailable);
+			return;
+		}
 
-				movingAlien.paused = true;
-				movingAlien.element.style.visibility = "hidden";
+		movingAlien.paused = true;
+		movingAlien.element.style.visibility = "hidden";
 
-				Alien.create(movingAlien.kind, target as HTMLElement, this.lastPlacedAlien).grow();
+		Alien.create(movingAlien.kind, targets[target], this.lastPlacedAlien).grow();
 
-				this.lastPlacedAlien++;
+		this.lastPlacedAlien++;
 
-				if (this.round < GameView.TotalRoundCount)
-					this.nextRoundButton.removeAttribute("disabled");
+		if (this.round < GameView.TotalRoundCount)
+			this.nextRoundButton.removeAttribute("disabled");
 
-				if (this.lastPlacedAlien >= GameView.MaximumAlienCount) {
-					this.nextRoundButton.removeAttribute("disabled");
-					this.nextRoundButton.replaceChild(document.createTextNode(Strings.Finish), this.nextRoundButton.childNodes[1]);
-				}
-			}
+		if (this.lastPlacedAlien >= GameView.MaximumAlienCount) {
+			this.nextRoundButton.removeAttribute("disabled");
+			this.nextRoundButton.replaceChild(document.createTextNode(Strings.Finish), this.nextRoundButton.childNodes[1]);
 		}
 	}
 
