@@ -32,7 +32,7 @@
 // whenever it detects a change in the source code of the
 // service worker).
 const CACHE_PREFIX = "labs-spacetrain-static-cache";
-const CACHE_VERSION = "-20210303";
+const CACHE_VERSION = "-20210411";
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
 
 self.addEventListener("install", (event) => {
@@ -44,8 +44,8 @@ self.addEventListener("install", (event) => {
 	// event.waitUntil(). Calling event.waitUntil() forces
 	// the installation process to be marked as finished
 	// only when all promises passed to waitUntil() finish.
-	//
-	// self.skipWaiting();
+
+	self.skipWaiting();
 
 	event.waitUntil(caches.open(CACHE_NAME).then((cache) => {
 		// According to the spec, the service worker file
@@ -69,7 +69,36 @@ self.addEventListener("install", (event) => {
 		// Let the commented files be downloaded/cached only
 		// if the browser requests them!
 		const files = [
-			"/labs-space-train/",
+			"/labs-spacetrain/",
+			"/labs-spacetrain/assets/favicons/favicon-512x512.png",
+			"/labs-spacetrain/assets/fonts/Orbitron-Bold.ttf?1138mc",
+			"/labs-spacetrain/assets/fonts/Orbitron-Regular.ttf?1138mc",
+			"/labs-spacetrain/assets/fonts/SpaceTrain.ttf?1138mc",
+			"/labs-spacetrain/assets/fonts/SpaceTrain.woff?1138mc",
+			"/labs-spacetrain/assets/images/aliens/black.png",
+			"/labs-spacetrain/assets/images/aliens/blue.png",
+			"/labs-spacetrain/assets/images/aliens/green.png",
+			"/labs-spacetrain/assets/images/aliens/indigo.png",
+			"/labs-spacetrain/assets/images/aliens/orange.png",
+			"/labs-spacetrain/assets/images/aliens/pink.png",
+			"/labs-spacetrain/assets/images/aliens/red.png",
+			"/labs-spacetrain/assets/images/aliens/yellow.png",
+			"/labs-spacetrain/assets/images/background.png",
+			"/labs-spacetrain/assets/images/fade.png",
+			"/labs-spacetrain/assets/images/loading.gif",
+			"/labs-spacetrain/assets/images/logo.png",
+			"/labs-spacetrain/assets/images/logo-small.png",
+			"/labs-spacetrain/assets/images/next.svg",
+			"/labs-spacetrain/assets/images/prev.svg",
+			"/labs-spacetrain/assets/images/rule0.png",
+			"/labs-spacetrain/assets/images/rule1.png",
+			"/labs-spacetrain/assets/images/rule2.png",
+			"/labs-spacetrain/assets/images/rule3.png",
+			"/labs-spacetrain/assets/images/rule4.png",
+			"/labs-spacetrain/assets/images/train.png",
+			"/labs-spacetrain/assets/js/scripts.es6.min.js",
+			"/labs-spacetrain/assets/js/scripts.min.js",
+			"/labs-spacetrain/assets/sounds/bgfade.mp3"
 		];
 		const promises = new Array(files.length);
 		for (let i = files.length - 1; i >= 0; i--)

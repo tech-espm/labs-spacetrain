@@ -31,7 +31,10 @@ class TitleView extends View {
 	private readonly rulesButton: HTMLButtonElement;
 	private readonly creditsButton: HTMLButtonElement;
 	private readonly musicButton: HTMLButtonElement;
+	private readonly installButton: HTMLButtonElement;
 	private readonly fullscreenButton: HTMLButtonElement;
+
+	private readonly boundInstallationPromptHandler: any;
 
 	private fadeSequence: number;
 	private fadeElements: HTMLElement[] | null;
@@ -72,6 +75,11 @@ class TitleView extends View {
 		this.musicButton.style.left = extraLargeMarginCss;
 		this.musicButton.style.bottom = extraLargeMarginCss;
 
+		this.installButton = View.createBlueButton(this.baseElement, Strings.Install, this.install.bind(this), "fade small");
+		this.installButton.style.position = "absolute";
+		this.installButton.style.right = extraLargeMarginCss;
+		this.installButton.style.bottom = (extraLargeMarginRem + 2) + "rem";
+
 		this.fullscreenButton = View.createWhiteButton(this.baseElement, Strings.Fullscreen, this.fullscreen.bind(this), "fade small");
 		this.fullscreenButton.style.position = "absolute";
 		this.fullscreenButton.style.right = extraLargeMarginCss;
@@ -80,14 +88,20 @@ class TitleView extends View {
 		this.fadeSequence = 0;
 		this.fadeElements = null;
 		this.fadeInterval = 0;
+
+		this.boundInstallationPromptHandler = this.installationPromptHandler.bind(this);
+
+		this.installationPromptHandler();
 	}
 
 	protected async attach(): Promise<void> {
+		installationPromptHandler = this.boundInstallationPromptHandler;
 		musicButton = this.musicButton;
 		updateMusicButton();
 	}
 
 	protected async detach(): Promise<void> {
+		installationPromptHandler = null;
 		musicButton = null;
 
 		if (this.fadeInterval) {
@@ -107,7 +121,7 @@ class TitleView extends View {
 		if (this.fadeSequence)
 			return;
 
-		const fadeElements = [this.logo, this.subtitle, this.startButton, this.rulesButton, this.creditsButton, this.musicButton, this.fullscreenButton];
+		const fadeElements = [this.logo, this.subtitle, this.startButton, this.rulesButton, this.creditsButton, this.musicButton, this.installButton, this.fullscreenButton];
 		if (fadeSequence < 0)
 			fadeElements.reverse();
 
@@ -166,5 +180,26 @@ class TitleView extends View {
 	private fullscreen(e: Event): boolean {
 		FullscreenControl.toggleFullscreen();
 		return true;
+	}
+
+	private install(e: Event): boolean {
+		if (installationPrompt && (installationPrompt as any)["prompt"]) {
+			try {
+				const p = installationPrompt as any;
+				installationPrompt = null;
+				p["prompt"]();
+			} catch (ex) {
+				// Just ignore...
+			}
+
+			// Wait for the blink to finish before removing the button from the screen
+			setTimeout(this.boundInstallationPromptHandler, blinkTotalDurationMS);
+		}
+		return true;
+	}
+
+	private installationPromptHandler(): void {
+		if (this.installButton)
+			this.installButton.style.display = (installationPrompt ? "" : "none");
 	}
 }

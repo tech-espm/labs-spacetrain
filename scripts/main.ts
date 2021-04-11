@@ -31,6 +31,7 @@ let scaleFactor = -1, widthCss = 0, heightCss = 0,
 	audioContext: AudioContext | null = null, audioBuffer: AudioBuffer | null = null, audioBufferSource: AudioBufferSourceNode | null = null,
 	bgMusic: HTMLAudioElement | null = null, musicButton: HTMLElement | null = null,
 	installationPrompt: Event | null = null,
+	installationPromptHandler: (() => void) | null = null,
 	landscapeWarning: HTMLDivElement | null = null;
 
 function ignorePromise(p: any): void {
@@ -232,6 +233,8 @@ function beforeInstallPrompt(e: Event): void {
 	if (("preventDefault" in e))
 		e.preventDefault();
 	installationPrompt = e;
+	if (installationPromptHandler)
+		installationPromptHandler();
 }
 
 function toggleMusic(e: Event): boolean {
@@ -369,7 +372,7 @@ function setup(): void {
 	if (("serviceWorker" in navigator)) {
 		window.addEventListener("beforeinstallprompt", beforeInstallPrompt);
 
-		//navigator.serviceWorker.register("sw.js");
+		navigator.serviceWorker.register("sw.js");
 	}
 
 	window.onpopstate = View.windowHistoryStatePopped;
