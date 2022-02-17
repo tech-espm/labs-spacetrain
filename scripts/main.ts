@@ -161,7 +161,7 @@ function adjustWindowSize(): void {
 		}
 	}
 
-	const transform = `scale(${Math.ceil(widthCss * 0.25)},${Math.ceil(heightCss * 0.25)})`;
+	const transform = `scale(${Math.ceil(widthCss * 0.35)},${Math.ceil(heightCss * 0.35)})`;
 	const style = View.cover.style as any;
 	style["oTransform"] = transform;
 	style["msTransform"] = transform;
